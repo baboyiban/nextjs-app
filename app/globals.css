@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+@theme {
+    --color-blue: #bfdfff;
+    --color-yellow: #ffefbf;
+    --color-red: #ffbfbf;
+}
+
+body {
+}
+
+* {
+    font-family: "Noto Sans KR", sans-serif;
+}
