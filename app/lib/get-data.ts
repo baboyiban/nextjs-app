@@ -1,9 +1,12 @@
 import axios, { AxiosError } from "axios";
 
-export async function getData<T>(url: string): Promise<T[]> {
+export async function getData<T>(
+  url: string,
+  validateStatus: (status: number) => boolean,
+): Promise<T[]> {
   try {
     const response = await axios.get<T[]>(url, {
-      validateStatus: () => true,
+      validateStatus,
       timeout: 5000,
     });
 

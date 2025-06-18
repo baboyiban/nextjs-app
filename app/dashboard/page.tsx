@@ -14,7 +14,7 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="p-[0.5rem] grid gap-[1rem]">
+    <div className="p-[1rem] grid gap-[1rem]">
       <DashboardSection
         title="구역 현황"
         items={regionRes}
