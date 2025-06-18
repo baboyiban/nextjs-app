@@ -1,8 +1,19 @@
 import { createFetcher } from "./create-fetcher";
-import { Employee } from "../types/database/employee";
+import { Employee, EmployeeSchema } from "../types/database/employee";
 
-/**
- * Fetcher for Employee data
- * Uses default status validation (2xx)
- */
-export const fetchEmployee = createFetcher<Employee>("employee");
+// API 응답을 Employee 스키마에 맞게 변환하는 함수
+function transformRawEmployee(rawItem: any): Employee {
+  const transformed: Employee = {
+    employee_id: rawItem.employee_id,
+    password: rawItem.password,
+    position: rawItem.position,
+    is_active: rawItem.is_active,
+  };
+  return transformed;
+}
+
+export const fetchEmployee = async (url?: string): Promise<Employee[]> => {
+  const rawData = await createFetcher("employee")(url);
+  const transformedData = rawData.map(transformRawEmployee);
+  return EmployeeSchema.array().parse(transformedData);
+};

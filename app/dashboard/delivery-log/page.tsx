@@ -1,11 +1,11 @@
 import { fetchDeliveryLog } from "@/app/lib/fetch-delivery-log";
-import { DeliveryLogSchema } from "@/app/types/database/delivery-log"; // DeliveryLog 타입은 더 이상 직접 임포트할 필요 없음
+import { DeliveryLogSchema } from "@/app/types/database/delivery-log";
 import { DataPage } from "@/app/components/data/data-page";
 import { Column } from "@/app/components/data/data-table";
+import { StatusBadge } from "@/app/components/ui/status-badge";
 import { z } from "zod";
 
 export default async function DeliveryLogPage() {
-  // columns 배열의 타입은 DataPage가 추론하므로 명시할 필요 없음
   const columns: Column<z.infer<typeof DeliveryLogSchema>>[] = [
     {
       header: "여행_ID",
@@ -25,44 +25,48 @@ export default async function DeliveryLogPage() {
     },
     {
       header: "등록_시각",
-      accessor: (
-        item, // item 타입은 TypeScript가 추론
-      ) => item.registered_at.toLocaleString(),
+      accessor: (item) => item.registered_at.toLocaleString(),
     },
     {
       header: "첫_운송_시각",
-      accessor: (
-        item, // item 타입은 TypeScript가 추론
-      ) =>
-        item.first_transport_time
-          ? item.first_transport_time.toLocaleString()
-          : "N/A",
+      accessor: (item) =>
+        item.first_transport_time ? (
+          item.first_transport_time.toLocaleString()
+        ) : (
+          <StatusBadge status="N/A" variant="neutral" />
+        ),
     },
     {
       header: "투입_시각",
-      accessor: (
-        item, // item 타입은 TypeScript가 추론
-      ) => (item.input_time ? item.input_time.toLocaleString() : "N/A"),
+      accessor: (item) =>
+        item.input_time ? (
+          item.input_time.toLocaleString()
+        ) : (
+          <StatusBadge status="N/A" variant="neutral" />
+        ),
     },
     {
       header: "두_운송_시각",
-      accessor: (
-        item, // item 타입은 TypeScript가 추론
-      ) =>
-        item.second_transport_time
-          ? item.second_transport_time.toLocaleString()
-          : "N/A",
+      accessor: (item) =>
+        item.second_transport_time ? (
+          item.second_transport_time.toLocaleString()
+        ) : (
+          <StatusBadge status="N/A" variant="neutral" />
+        ),
     },
     {
       header: "완료_시각",
-      accessor: (
-        item, // item 타입은 TypeScript가 추론
-      ) => (item.completed_at ? item.completed_at.toLocaleString() : "N/A"),
+      accessor: (item) =>
+        item.completed_at ? (
+          item.completed_at.toLocaleString()
+        ) : (
+          <StatusBadge status="N/A" variant="neutral" />
+        ),
     },
   ];
 
   return (
-    <DataPage // DataPage에 제네릭 타입 명시할 필요 없음
+    <DataPage
       fetcher={fetchDeliveryLog}
       schema={DeliveryLogSchema}
       columns={columns}

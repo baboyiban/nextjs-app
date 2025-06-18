@@ -2,6 +2,7 @@ import { fetchRegion } from "@/app/lib/fetch-region";
 import { RegionSchema } from "@/app/types/database/region";
 import { DataPage } from "@/app/components/data/data-page";
 import { Column } from "@/app/components/data/data-table";
+import { StatusBadge } from "@/app/components/ui/status-badge";
 import { z } from "zod";
 
 export default async function RegionPage() {
@@ -33,21 +34,20 @@ export default async function RegionPage() {
     {
       header: "포화_여부",
       accessor: (item) => (
-        <div
-          className={`p-[0.5rem] rounded-lg text-[13px] w-fit ${
-            item.is_full ? "bg-red" : "bg-green"
-          }`}
-        >
-          {item.is_full ? "포화" : "비포화"}
-        </div>
+        <StatusBadge
+          status={item.is_full ? "포화" : "비포화"}
+          variant={item.is_full ? "danger" : "success"}
+        />
       ),
     },
     {
       header: "포화_시각",
       accessor: (item) =>
-        item.saturated_at
-          ? new Date(item.saturated_at).toLocaleString()
-          : "N/A",
+        item.saturated_at ? (
+          new Date(item.saturated_at).toLocaleString()
+        ) : (
+          <StatusBadge status="N/A" variant="neutral" />
+        ),
     },
   ];
 

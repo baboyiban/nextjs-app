@@ -26,9 +26,9 @@ export function DataTable<T>({
   }
 
   return (
-    <div className="bg-white p-[1rem] rounded-lg">
-      <div className="overflow-x-auto rounded-lg border border-gray">
-        <table className="min-w-full bg-white">
+    <div className="bg-white p-[1rem] rounded-lg max-w-[calc(100dvw-15rem-1rem-0.5rem)]">
+      <div className="overflow-x-auto rounded-lg border border-gray w-full">
+        <table className="min-w-full bg-white border-collapse">
           <thead className="bg-gray">
             <tr className="*:p-[0.5rem] *:whitespace-nowrap *:font-normal text-left">
               {columns.map((col, idx) => (
@@ -46,15 +46,11 @@ export function DataTable<T>({
                   let renderedValue: React.ReactNode;
 
                   if (col.cell) {
-                    // cell이 정의되어 있으면 cell의 결과를 사용합니다.
                     renderedValue = col.cell(item);
                   } else if (typeof col.accessor === "function") {
-                    // accessor가 함수이면 그 함수의 결과를 사용합니다.
                     renderedValue = col.accessor(item);
                   } else {
-                    // accessor가 keyof T이면 해당 속성 값을 사용합니다.
                     const rawValue = item[col.accessor as keyof T];
-                    // JSX가 아니면 문자열로 변환하여 안전하게 렌더링합니다.
                     renderedValue = React.isValidElement(rawValue)
                       ? rawValue
                       : rawValue == null

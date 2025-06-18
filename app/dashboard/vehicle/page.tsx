@@ -2,6 +2,7 @@ import { fetchVehicle } from "@/app/lib/fetch-vehicle";
 import { VehicleSchema } from "@/app/types/database/vehicle";
 import { DataPage } from "@/app/components/data/data-page";
 import { Column } from "@/app/components/data/data-table";
+import { StatusBadge } from "@/app/components/ui/status-badge";
 import { z } from "zod";
 
 export default async function VehiclePage() {
@@ -25,29 +26,27 @@ export default async function VehiclePage() {
     {
       header: "LED_상태",
       accessor: (item) => (
-        <div
-          className={`p-[0.5rem] rounded-lg text-[13px] w-fit ${
+        <StatusBadge
+          status={item.led_status || "N/A"}
+          variant={
             item.led_status === "빨강"
-              ? "bg-red"
+              ? "danger"
               : item.led_status === "노랑"
-                ? "bg-yellow"
-                : "bg-green"
-          }`}
-        >
-          {item.led_status || "N/A"}
-        </div>
+                ? "warning"
+                : item.led_status === "초록"
+                  ? "success"
+                  : "neutral"
+          }
+        />
       ),
     },
     {
       header: "확인_필요",
       accessor: (item) => (
-        <div
-          className={`p-[0.5rem] rounded-lg text-[13px] w-fit ${
-            item.needs_confirmation ? "bg-red" : "bg-green"
-          }`}
-        >
-          {item.needs_confirmation ? "필요" : "불필요"}
-        </div>
+        <StatusBadge
+          status={item.needs_confirmation ? "필요" : "불필요"}
+          variant={item.needs_confirmation ? "danger" : "success"}
+        />
       ),
     },
     {

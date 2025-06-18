@@ -2,11 +2,12 @@
 
 @theme {
     --color-blue: #bfdfff;
-    --color-yellow: #ffefbf;
     --color-red: #ffbfbf;
+    --color-green: #bff77f;
+    --color-yellow: #ffdf7f;
     --color-gray: #efefef;
     --color-deepGray: #dfdfdf;
-    --color-green: #bfffbf;
+    --color-darkGray: #7f7f7f;
 }
 
 html {

@@ -1,38 +1,48 @@
-import { fetchRegion } from "@/app/lib/fetch-region";
-import { fetchVehicle } from "@/app/lib/fetch-vehicle";
-import { fetchPackage } from "@/app/lib/fetch-package";
-import { DashboardSection } from "@/app/components/dashboard/section";
-import { RegionCard } from "@/app/components/dashboard/region-card";
-import { VehicleCard } from "@/app/components/dashboard/vehicle-card";
-import { PackageCard } from "@/app/components/dashboard/package-card";
+"use client";
 
-export default async function DashboardPage() {
-  const [regionRes, vehicleRes, packageRes] = await Promise.all([
-    fetchRegion(),
-    fetchVehicle(),
-    fetchPackage(),
-  ]);
+import React from "react";
+import { useDashboardData } from "../hooks/use-dashboard-data";
+import GridMap from "../components/dashboard/GridMap";
+import PackageList from "../components/dashboard/PackageList";
+import StatsSection from "../components/dashboard/StatsSection";
+import Legend from "../components/dashboard/Legend";
+
+export default function DashboardPage() {
+  const { regions, vehicles, packages, loading, lastUpdated } =
+    useDashboardData();
+
+  if (loading) {
+    return (
+      <div className="p-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">데이터를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-[1rem] grid gap-[1rem]">
-      <DashboardSection
-        title="구역 현황"
-        items={regionRes}
-        renderItem={(region) => <RegionCard region={region} />}
-        bgColor="red"
-      />
-      <DashboardSection
-        title="차량 현황"
-        items={vehicleRes}
-        renderItem={(vehicle) => <VehicleCard vehicle={vehicle} />}
-        bgColor="blue"
-      />
-      <DashboardSection
-        title="택배 현황"
-        items={packageRes}
-        renderItem={(pkg) => <PackageCard package={pkg} />}
-        bgColor="yellow"
-      />
+    <div className="bg-white rounded-lg p-[1rem]">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800">
+          차량 및 지역 현황 (실시간)
+        </h2>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-sm text-gray-600">
+            {lastUpdated ? `${lastUpdated.toLocaleTimeString()}` : ""}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex gap-6">
+        <GridMap regions={regions} vehicles={vehicles} packages={packages} />
+        <PackageList packages={packages} />
+      </div>
+
+      <StatsSection regions={regions} vehicles={vehicles} packages={packages} />
+      <Legend />
     </div>
   );
 }
