@@ -2,7 +2,8 @@ import axios, { AxiosError } from "axios";
 
 export async function getData<T>(
   url: string,
-  validateStatus: (status: number) => boolean,
+  validateStatus: (status: number) => boolean = (status) =>
+    status >= 200 && status < 300,
 ): Promise<T[]> {
   try {
     const response = await axios.get<T[]>(url, {
@@ -13,7 +14,9 @@ export async function getData<T>(
     return response.data || [];
   } catch (error) {
     const errorMessage =
-      error instanceof AxiosError ? error.message : String(error);
+      error instanceof AxiosError
+        ? `HTTP ${error.status}: ${error.message} - ${JSON.stringify(error.response?.data || error.code)}`
+        : `Unknown error: ${String(error)}`;
 
     console.error(`[API Error] ${url}: ${errorMessage}`);
     return [];

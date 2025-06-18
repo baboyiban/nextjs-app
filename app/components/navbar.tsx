@@ -1,10 +1,17 @@
 "use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const navLinks = [
     { name: "전체 현황", href: "/dashboard" },
     { name: "지역", href: "/dashboard/region" },
+    { name: "차량", href: "/dashboard/vehicle" },
+    { name: "택배", href: "/dashboard/package" },
+    { name: "운행 기록", href: "/dashboard/trip-log" },
+    { name: "운행 택배", href: "/dashboard/delivery-log" },
+    { name: "직원", href: "/dashboard/employee" },
   ];
 
   return (
@@ -18,9 +25,13 @@ export default function Navbar() {
           로그아웃
         </button>
       </div>
-      <div className="flex flex-col *:bg-white rounded-lg *:p-[0.5rem] *:text-center overflow-hidden *:not-last:border-b-[1px] *:not-last:border-b-[var(--color-gray)]">
+      <div className="flex flex-col bg-white rounded-lg *:p-[0.5rem] *:text-center overflow-hidden *:not-last:border-b *:not-last:border-b-[var(--color-gray)] shadow-[inset_0_0_1px_rgba(0,0,0,0.1)]">
         {navLinks.map((link) => (
-          <Link key={link.href} href={link.href}>
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`block${pathname === link.href ? " bg-blue" : ""}`}
+          >
             {link.name}
           </Link>
         ))}
