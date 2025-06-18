@@ -4,6 +4,8 @@
     --color-blue: #bfdfff;
     --color-yellow: #ffefbf;
     --color-red: #ffbfbf;
+    --color-gray: #efefef;
+    --color-deepGray: #dfdfdf;
 }
 
 body {
