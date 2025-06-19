@@ -5,7 +5,7 @@ import {
   calculatePackageStats,
   calculateAvailableSpaces,
 } from "../../utils/dashboard";
-import StatCard from "./StatCard";
+import StatCard from "./stat-card";
 import { Region } from "@/app/types/database/region";
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Package } from "@/app/types/database/package";

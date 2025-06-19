@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import GridCell from "./GridCell";
+import GridCell from "./grid-cell";
 import { Package } from "@/app/types/database/package";
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Region } from "@/app/types/database/region";

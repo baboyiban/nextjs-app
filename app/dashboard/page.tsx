@@ -2,11 +2,11 @@
 
 import React, { useEffect } from "react";
 import { useDashboardData } from "../hooks/use-dashboard-data";
-import GridMap from "../components/dashboard/GridMap";
-import PackageList from "../components/dashboard/PackageList";
-import StatsSection from "../components/dashboard/StatsSection";
-import Legend from "../components/dashboard/Legend";
+import GridMap from "../components/dashboard/grid-map";
+import PackageList from "../components/dashboard/package-list";
+import StatsSection from "../components/dashboard/stats-section";
 import { Loading } from "../components/ui/loading";
+import Legend from "../components/dashboard/legend";
 
 export default function DashboardPage() {
   const { regions, vehicles, packages, loading, lastUpdated } =
