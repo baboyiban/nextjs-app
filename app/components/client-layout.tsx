@@ -36,7 +36,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
     <div
       className={
-        shouldShowNavbar ? "flex gap-[0.5rem] bg-gray p-[0.5rem]" : "bg-gray-50"
+        shouldShowNavbar ? "flex gap-[0.5rem] p-[0.5rem]" : "bg-gray-50"
       }
     >
       {shouldShowNavbar && <Navbar />}

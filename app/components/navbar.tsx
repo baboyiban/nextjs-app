@@ -24,13 +24,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="min-w-[15rem] max-w-[15rem] h-full flex flex-col gap-[0.5rem]">
+    <nav className="min-w-[15rem] max-w-[15rem] flex flex-col gap-[0.5rem] min-h-screen p-[0.5rem]">
       <div className="*:py-[1rem] *:text-center *:rounded-lg shadow-[inset_0_0_1px_rgba(0,0,0,0.1)] bg-white rounded-lg flex *:flex-auto">
         <div>
-          <div className="font-medium">{user?.position || "관리직"}</div>
-          {user && (
-            <div className="text-sm text-gray-600">ID: {user.employee_id}</div>
-          )}
+          <div className="font-medium">
+            {user?.position || "관리직"}: {user && user.employee_id}
+          </div>
         </div>
         <button
           type="button"
