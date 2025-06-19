@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Region } from "@/app/types/database/region";
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Package } from "@/app/types/database/package";
@@ -16,6 +17,7 @@ interface DashboardData {
 }
 
 export function useDashboardData(): DashboardData {
+  const pathname = usePathname();
   const [regions, setRegions] = useState<Region[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [packages, setPackages] = useState<Package[]>([]);
@@ -51,10 +53,16 @@ export function useDashboardData(): DashboardData {
   };
 
   useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, UPDATE_INTERVAL);
-    return () => clearInterval(interval);
-  }, []);
+    // 대시보드 페이지일 때만 데이터 요청
+    if (pathname === "/dashboard") {
+      fetchData();
+      const interval = setInterval(fetchData, UPDATE_INTERVAL);
+      return () => clearInterval(interval);
+    } else {
+      // 대시보드 페이지가 아닐 때는 로딩 상태만 변경
+      setLoading(false);
+    }
+  }, [pathname]);
 
   return { regions, vehicles, packages, loading, lastUpdated };
 }

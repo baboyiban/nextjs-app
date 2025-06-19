@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useDashboardData } from "../hooks/use-dashboard-data";
 import GridMap from "../components/dashboard/GridMap";
 import PackageList from "../components/dashboard/PackageList";
@@ -10,6 +10,16 @@ import Legend from "../components/dashboard/Legend";
 export default function DashboardPage() {
   const { regions, vehicles, packages, loading, lastUpdated } =
     useDashboardData();
+
+  // 타이틀 업데이트 (선택 사항)
+  useEffect(() => {
+    document.title = "대시보드 | 물류 관리 시스템";
+
+    // 컴포넌트 언마운트 시 타이틀 복원
+    return () => {
+      document.title = "물류 관리 시스템";
+    };
+  }, []);
 
   if (loading) {
     return (

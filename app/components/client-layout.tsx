@@ -15,16 +15,14 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   // 로그인 페이지인지 확인
   const isLoginPage = pathname === "/login";
 
+  // 보호된 경로인지 확인
+  const isProtectedRoute = pathname.startsWith("/dashboard");
+
   // 로그인 페이지이거나 인증되지 않은 경우 navbar 숨기기
   const shouldShowNavbar = !isLoginPage && isAuthenticated;
 
-  // 로그인 페이지에서는 별도 처리 없이 바로 렌더링
-  if (isLoginPage) {
-    return <div className="bg-gray-50">{children}</div>;
-  }
-
-  // 대시보드 페이지에서 로딩 중일 때만 로딩 표시
-  if (loading) {
+  // 인증이 필요한 페이지에서 로딩 중일 때
+  if (isProtectedRoute && loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
