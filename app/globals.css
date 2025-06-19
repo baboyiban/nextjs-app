@@ -3,11 +3,15 @@
 @theme {
     --color-gray: #efefef;
     --color-red: #ff9999;
-    --color-yellow: #ffdf7f;
-    --color-green: #bff77f;
+    --color-yellow: #ffe699;
+    --color-green: #99ff99;
     --color-blue: #99ccff;
+    --color-purple: #cc99ff;
+    --color-deep-gray: #dfdfdf;
     --color-dark-gray: #7f7f7f;
     --color-dark-red: #ff3333;
+    --color-dark-yellow: #ffcc33;
+    --color-dark-green: #33ff33;
     --color-dark-blue: #3399ff;
 }
 

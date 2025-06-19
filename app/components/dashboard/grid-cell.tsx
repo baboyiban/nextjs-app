@@ -29,11 +29,9 @@ export default function GridCell({
 
   if (isEmpty) {
     return (
-      <div className="relative flex flex-col items-center justify-center size-16 bg-gray-800 cursor-not-allowed">
-        <div className="flex items-center justify-center w-full h-full">
-          <div className="text-gray-500 text-xs">✕</div>
-        </div>
-        <div className="absolute bottom-0.5 right-0.5 text-[8px] text-gray-400">
+      <div className="relative flex flex-col items-center justify-center size-[4rem]">
+        <div className="flex items-center justify-center w-full h-full"></div>
+        <div className="absolute bottom-[0.1rem] right-[0.1rem] text-[0.5rem] text-transparent">
           {col},{row}
         </div>
       </div>
@@ -43,18 +41,17 @@ export default function GridCell({
   return (
     <div
       className={`
-        relative flex flex-col items-center justify-center
-        size-16 border border-gray-300
+        relative flex flex-col items-center justify-center size-16 border-[0.5px] border-deep-gray outline-[0.5px] outline-dark-gray
         ${
           region
-            ? "bg-blue-50 hover:bg-gray-50 transition-colors duration-200"
-            : "bg-white hover:bg-gray-50 transition-colors duration-200"
+            ? "bg-blue hover:bg-purple hover:bg-blue transition-colors duration-[200ms]"
+            : "hover:bg-red transition-colors duration-[200ms]"
         }
       `}
     >
       {/* 지역명 */}
       {region && (
-        <div className="absolute top-0.5 left-0.5 text-[10px] text-blue-600 font-medium">
+        <div className="absolute top-[0.1rem] left-[0.1rem] text-[0.75rem]">
           {region.region_name}
         </div>
       )}
@@ -73,20 +70,19 @@ export default function GridCell({
             <div
               key={vehicle.internal_id}
               className={`
-                text-[10px] font-medium px-1.5 py-0.5 rounded-full border
-                transition-all duration-300 animate-pulse
+                text-[0.5rem] rounded-lg p-[0.25rem]
                 ${getVehicleLedStyle(vehicle.led_status)}
               `}
               title={`${vehicle.vehicle_id} | 적재: ${vehicle.current_load}/${vehicle.max_load} | LED: ${vehicle.led_status || "없음"}`}
             >
-              {vehicle.vehicle_id}
+              🚚 {vehicle.vehicle_id}
             </div>
           ))}
         </div>
       )}
 
       {/* 좌표 표시 */}
-      <div className="absolute bottom-0.5 right-0.5 text-[8px] text-gray-400">
+      <div className="absolute bottom-[0.1rem] right-[0.1rem] text-[0.5rem] text-dark-gray">
         {col},{row}
       </div>
     </div>
