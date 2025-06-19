@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useAuth } from "../hooks/use-auth";
 import Navbar from "./navbar";
+import { Loading } from "./ui/loading";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -23,14 +24,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   // 인증이 필요한 페이지에서 로딩 중일 때
   if (isProtectedRoute && loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">로딩 중...</p>
-        </div>
-      </div>
-    );
+    return <Loading fullScreen text="로딩 중..." />;
   }
 
   return (

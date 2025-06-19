@@ -6,6 +6,7 @@ import GridMap from "../components/dashboard/GridMap";
 import PackageList from "../components/dashboard/PackageList";
 import StatsSection from "../components/dashboard/StatsSection";
 import Legend from "../components/dashboard/Legend";
+import { Loading } from "../components/ui/loading";
 
 export default function DashboardPage() {
   const { regions, vehicles, packages, loading, lastUpdated } =
@@ -22,14 +23,7 @@ export default function DashboardPage() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="p-6 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">데이터를 불러오는 중...</p>
-        </div>
-      </div>
-    );
+    return <Loading text="데이터를 불러오는 중..." />;
   }
 
   return (

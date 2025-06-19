@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-    --color-blue: #bfdfff;
-    --color-red: #ffbfbf;
-    --color-green: #bff77f;
-    --color-yellow: #ffdf7f;
     --color-gray: #efefef;
-    --color-deepGray: #dfdfdf;
-    --color-darkGray: #7f7f7f;
+    --color-red: #ff9999;
+    --color-yellow: #ffdf7f;
+    --color-green: #bff77f;
+    --color-blue: #99ccff;
+    --color-dark-gray: #7f7f7f;
+    --color-dark-red: #ff3333;
+    --color-dark-blue: #3399ff;
 }
 
 html {
@@ -25,28 +26,3 @@ body {
 button {
     cursor: pointer;
 }
-
-/* .table-wrapper {
-    overflow-x: auto;
-    border: 1px solid var(--color-gray);
-    border-radius: 0.5rem;
-}
-table {
-    table-layout: auto;
-    border-collapse: collapse;
-    border-spacing: 0;
-    min-width: 100%;
-}
-table > thead > tr {
-    background-color: var(--color-gray);
-}
-table > tbody > tr:not(:last-child) {
-    border-bottom: 1px solid var(--color-gray);
-}
-table th {
-    font-weight: 400;
-}
-table th,
-td {
-    padding: 0.5rem;
-} */

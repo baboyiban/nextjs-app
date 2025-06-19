@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "../hooks/use-auth";
+import { Loading } from "../components/ui/loading";
 
 export default function LoginPage() {
   const [employeeId, setEmployeeId] = useState("");
@@ -65,42 +66,46 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
-        {/* 에러 메시지 */}
-        {error && <div>{error}</div>}
+      {loading ? (
+        <Loading text="로그인 중..." />
+      ) : (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
+          {/* 에러 메시지 */}
+          {error && <div className="text-dark-red text-sm">{error}</div>}
 
-        {/* 직원 ID 입력 */}
-        <input
-          value={employeeId}
-          onChange={handleEmployeeIdChange}
-          disabled={loading}
-          placeholder="직원 ID"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          type="text"
-          className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg"
-        />
+          {/* 직원 ID 입력 */}
+          <input
+            value={employeeId}
+            onChange={handleEmployeeIdChange}
+            disabled={loading}
+            placeholder="직원 ID"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            type="text"
+            className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg"
+          />
 
-        {/* 비밀번호 입력 */}
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={loading}
-          placeholder="비밀번호"
-          autoComplete="current-password"
-          className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg"
-        />
+          {/* 비밀번호 입력 */}
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
+            placeholder="비밀번호"
+            autoComplete="current-password"
+            className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg"
+          />
 
-        {/* 제출 버튼 */}
-        <button
-          type="submit"
-          disabled={loading || !employeeId || !password}
-          className="w-[15rem] px-[1rem] py-[0.5rem] bg-blue rounded-lg"
-        >
-          {loading ? "로딩 중..." : "로그인"}
-        </button>
-      </form>
+          {/* 제출 버튼 */}
+          <button
+            type="submit"
+            disabled={loading || !employeeId || !password}
+            className="w-[15rem] px-[1rem] py-[0.5rem] bg-blue rounded-lg"
+          >
+            로그인
+          </button>
+        </form>
+      )}
     </div>
   );
 }
