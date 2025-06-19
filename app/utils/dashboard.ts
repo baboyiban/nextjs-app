@@ -139,18 +139,20 @@ export const isEmptySpace = (x: number, y: number): boolean => {
 };
 
 // 패키지 상태에 따른 색상 반환
-export const getPackageStatusColor = (status: string): string => {
+export const getPackageStatus = (
+  status: string,
+): "success" | "warning" | "danger" | "neutral" | "process" => {
   switch (status) {
     case "등록됨":
-      return "bg-gray";
+      return "neutral";
     case "투입됨":
-      return "bg-blue";
+      return "process";
     case "A차운송중":
-      return "bg-yellow";
+      return "warning";
     case "배송완료":
-      return "bg-green";
+      return "success";
     default:
-      return "bg-gray";
+      return "neutral";
   }
 };
 
@@ -168,19 +170,6 @@ export const getVehicleLedStyle = (ledStatus?: string): string => {
   }
 };
 
-// 패키지 상태별 통계 계산
-export const calculatePackageStats = (
-  packages: Package[],
-): Record<string, number> => {
-  return packages.reduce(
-    (acc, pkg) => {
-      acc[pkg.package_status] = (acc[pkg.package_status] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
-};
-
 // 사용 가능한 공간 수 계산 (차량별로 계산)
 export const calculateAvailableSpaces = (vehicleId?: string): number => {
   const mapSize = vehicleId
@@ -191,11 +180,5 @@ export const calculateAvailableSpaces = (vehicleId?: string): number => {
     : emptySpacesA1000;
 
   const totalSpaces = mapSize.width * mapSize.height;
-  return totalSpaces - emptySpaces.size;
-};
-
-// 기존 함수 (호환성을 위해 유지)
-export const calculateAvailableSpacesLegacy = (): number => {
-  const totalSpaces = 9 * 9;
   return totalSpaces - emptySpaces.size;
 };

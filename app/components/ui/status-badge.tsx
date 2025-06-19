@@ -1,6 +1,6 @@
 type StatusBadgeProps = {
   status: string;
-  variant: "success" | "warning" | "danger" | "neutral";
+  variant: "success" | "warning" | "danger" | "neutral" | "process";
 };
 
 export function StatusBadge({ status, variant }: StatusBadgeProps) {
@@ -8,11 +8,14 @@ export function StatusBadge({ status, variant }: StatusBadgeProps) {
     success: "bg-green",
     warning: "bg-yellow",
     danger: "bg-red",
-    neutral: "bg-gray"
+    neutral: "bg-gray",
+    process: "bg-blue",
   };
 
   return (
-    <div className={`p-[0.5rem] rounded-lg text-[13px] w-fit ${variantClasses[variant]}`}>
+    <div
+      className={`p-[0.5rem] rounded-lg text-[0.75rem] w-fit ${variantClasses[variant]}`}
+    >
       {status}
     </div>
   );
