@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { isEmptySpace, getVehicleLedStyle } from "../../utils/dashboard";
+import { getVehicleLedStyle } from "../../utils/dashboard";
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Package } from "@/app/types/database/package";
 import { Region } from "@/app/types/database/region";
@@ -12,6 +12,7 @@ interface GridCellProps {
   region?: Region;
   vehicles: Vehicle[];
   packages: Package[];
+  emptySpaces: Set<string>; // 빈 공간 정보를 props로 받음
 }
 
 export default function GridCell({
@@ -20,8 +21,9 @@ export default function GridCell({
   region,
   vehicles,
   packages,
+  emptySpaces,
 }: GridCellProps) {
-  const isEmpty = isEmptySpace(col, row);
+  const isEmpty = emptySpaces.has(`${col},${row}`);
   const vehiclesAtPosition = isEmpty ? [] : vehicles;
   const packagesInRegion = region ? packages : [];
 
