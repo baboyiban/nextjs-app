@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useAuth } from "../hooks/use-auth";
 
 export default function LoginPage() {
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,32 +30,17 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          employee_id: numericEmployeeId,
-          password: password.trim(),
-        }),
-      });
+      const result = await login(numericEmployeeId, password);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // 로그인 성공 시 대시보드로 리다이렉트
-        router.push("/dashboard");
-        router.refresh(); // 레이아웃 업데이트
-      } else {
+      if (!result.success) {
         // 상태 코드별로 다른 오류 메시지 표시
-        switch (response.status) {
+        switch (result.status) {
           case 400:
-            setError(data.error || "입력 정보를 확인해주세요.");
+            setError(result.error || "입력 정보를 확인해주세요.");
             break;
           case 401:
             setError(
-              data.error || "직원 ID 또는 비밀번호가 올바르지 않습니다.",
+              result.error || "직원 ID 또는 비밀번호가 올바르지 않습니다.",
             );
             break;
           case 403:
@@ -69,9 +54,10 @@ export default function LoginPage() {
             );
             break;
           default:
-            setError(data.error || "로그인에 실패했습니다.");
+            setError(result.error || "로그인에 실패했습니다.");
         }
       }
+      // 성공 시 redirect는 middleware에서 처리
     } catch (error) {
       console.error("로그인 요청 오류:", error);
       setError(
@@ -84,7 +70,6 @@ export default function LoginPage() {
 
   const handleEmployeeIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // 숫자만 입력 허용
     if (value === "" || /^\d+$/.test(value)) {
       setEmployeeId(value);
     }
