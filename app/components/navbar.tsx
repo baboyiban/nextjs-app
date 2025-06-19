@@ -1,9 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/app/hooks/use-auth";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
+
   const navLinks = [
     { name: "전체 현황", href: "/dashboard" },
     { name: "지역", href: "/dashboard/region" },
@@ -14,13 +17,25 @@ export default function Navbar() {
     { name: "직원", href: "/dashboard/employee" },
   ];
 
+  const handleLogout = () => {
+    if (confirm("로그아웃하시겠습니까?")) {
+      logout();
+    }
+  };
+
   return (
     <nav className="min-w-[15rem] max-w-[15rem] h-full flex flex-col gap-[0.5rem]">
       <div className="*:py-[1rem] *:text-center *:rounded-lg shadow-[inset_0_0_1px_rgba(0,0,0,0.1)] bg-white rounded-lg flex *:flex-auto">
-        <div>관리자</div>
+        <div>
+          <div className="font-medium">{user?.position || "관리직"}</div>
+          {user && (
+            <div className="text-sm text-gray-600">ID: {user.employee_id}</div>
+          )}
+        </div>
         <button
           type="button"
-          className="bg-red shadow-[0_0_1px_rgba(0,0,0,0.1)]"
+          onClick={handleLogout}
+          className="bg-red shadow-[0_0_1px_rgba(0,0,0,0.1)] hover:opacity-80 transition-opacity"
         >
           로그아웃
         </button>
