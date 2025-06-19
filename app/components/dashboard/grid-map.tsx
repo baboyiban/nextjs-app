@@ -69,7 +69,7 @@ function SingleMap({ vehicleId, regions, vehicles, packages }: SingleMapProps) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-[0.5rem]">
       {/* 맵 제목 */}
       <div className="">
         {mapSize.width}×{mapSize.height}
@@ -85,9 +85,9 @@ export default function GridMap({ regions, vehicles, packages }: GridMapProps) {
   const availableVehicleIds = Object.keys(VEHICLE_MAP_CONFIG);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col bg-white rounded-lg w-fit overflow-y-auto p-[1rem] pb-[2rem]">
       {/* 두 맵을 나란히 배치 */}
-      <div className="flex gap-8 justify-center flex-wrap">
+      <div className="flex gap-[2rem] justify-center flex-wrap">
         {availableVehicleIds.map((vehicleId) => (
           <SingleMap
             key={vehicleId}

@@ -82,7 +82,7 @@ export default function LoginPage() {
             inputMode="numeric"
             pattern="[0-9]*"
             type="text"
-            className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg"
+            className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg text-dark-gray"
           />
 
           {/* 비밀번호 입력 */}
@@ -93,7 +93,7 @@ export default function LoginPage() {
             disabled={loading}
             placeholder="비밀번호"
             autoComplete="current-password"
-            className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg"
+            className="w-[15rem] px-[1rem] py-[0.5rem] bg-gray rounded-lg text-dark-gray"
           />
 
           {/* 제출 버튼 */}

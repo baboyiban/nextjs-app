@@ -16,13 +16,13 @@ export default function VehicleSummary({ vehicles }: VehicleSummaryProps) {
   const availableVehicleIds = Object.keys(VEHICLE_MAP_CONFIG);
 
   return (
-    <div className="grid grid-cols-2 gap-[1rem]">
+    <div className="flex flex-col w-fit min-w-fit gap-[0.5rem]">
       {availableVehicleIds.map((vehicleId) => {
         const vehicleData = vehicles.find((v) => v.vehicle_id === vehicleId);
         const mapSize = getMapSizeForVehicle(vehicleId);
 
         return (
-          <div key={vehicleId} className="">
+          <div key={vehicleId} className="bg-white p-[0.5rem] rounded-lg">
             <div className="">{vehicleId}</div>
             <div className="">
               <div>

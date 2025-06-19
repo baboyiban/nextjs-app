@@ -44,8 +44,8 @@ export default function GridCell({
         relative flex flex-col items-center justify-center size-16 border-[0.5px] border-deep-gray outline-[0.5px] outline-dark-gray
         ${
           region
-            ? "bg-blue hover:bg-purple hover:bg-blue transition-colors duration-[200ms]"
-            : "hover:bg-red transition-colors duration-[200ms]"
+            ? "bg-blue hover:bg-purple transition-colors duration-[200ms]"
+            : "hover:bg-gray transition-colors duration-[200ms]"
         }
       `}
     >

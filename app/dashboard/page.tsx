@@ -16,9 +16,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="bg-white rounded-lg p-[1rem] flex flex-col gap-[1rem]">
+    <div className="flex flex-col gap-[0.5rem] max-h-[calc(100dvh-1rem)]">
       {/* 오전 11:48:16 */}
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center bg-white rounded-lg p-[0.25rem]">
         <div className="flex items-center gap-[0.5rem]">
           <div className="w-[0.5rem] h-[0.5rem] bg-dark-green rounded-full animate-pulse"></div>
           <span className="text-sm text-dark-gray">
@@ -27,9 +27,11 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <VehicleSummary vehicles={vehicles} />
-      <GridMap regions={regions} vehicles={vehicles} packages={packages} />
-      <PackageList packages={packages} />
+      <div className="flex gap-[0.5rem] max-h-[calc(100dvh-16px-28px-8px)]">
+        <VehicleSummary vehicles={vehicles} />
+        <GridMap regions={regions} vehicles={vehicles} packages={packages} />
+        <PackageList packages={packages} />
+      </div>
     </div>
   );
 }
