@@ -43,7 +43,6 @@ export async function middleware(request: NextRequest) {
 
   // 토큰에서 유저 정보 추출
   const user = await getUserFromToken(token);
-  console.log("미들웨어 토큰 payload:", user);
   if (!user) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

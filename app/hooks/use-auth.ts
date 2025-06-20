@@ -24,7 +24,6 @@ export function useAuth() {
         method: "GET",
         credentials: "include",
       });
-      console.log("response:", response);
       if (response.ok) {
         const userData = await response.json();
         console.log("user:", userData);

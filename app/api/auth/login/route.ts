@@ -24,7 +24,6 @@ export async function POST(request: Request) {
     }
 
     let responseData;
-    console.log("responseText", responseText);
     try {
       responseData = JSON.parse(responseText);
     } catch (e) {
