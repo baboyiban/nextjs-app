@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { DataTable, Column } from "@/app/components/data/data-table";
 import { z } from "zod";
 import { EmployeeSchema, Employee } from "@/app/types/database/employee";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import GenericSearchBar from "@/app/components/data/search-bar";
+import SearchTableSection from "@/app/components/data/search-table-section";
+import { Column } from "@/app/components/data/data-table";
 
 type EmployeeColumnDef = {
   key: keyof Employee;
@@ -34,27 +34,23 @@ const employeeColumnDefs: EmployeeColumnDef[] = [
 
 const fields = employeeColumnDefs.map(({ key, label }) => ({ key, label }));
 
+const columns: Column<Employee>[] = employeeColumnDefs.map((def) => ({
+  header: def.label,
+  accessor: def.key,
+  ...(def.cell ? { cell: def.cell } : {}),
+}));
+
 export default function EmployeeTableWithSearch({ initialEmployees }: Props) {
   const [employees, setEmployees] = useState(initialEmployees);
 
-  const columns: Column<Employee>[] = employeeColumnDefs.map((def) => ({
-    header: def.label,
-    accessor: def.key,
-    ...(def.cell ? { cell: def.cell } : {}),
-  }));
-
   return (
-    <div className="flex flex-col gap-4">
-      <GenericSearchBar
-        fields={fields}
-        setDataAction={setEmployees}
-        apiPath="employee"
-      />
-      <DataTable
-        data={employees}
-        columns={columns}
-        emptyMessage="데이터가 없습니다."
-      />
-    </div>
+    <SearchTableSection
+      fields={fields}
+      setDataAction={setEmployees}
+      apiPath="employee"
+      data={employees}
+      columns={columns}
+      emptyMessage="데이터가 없습니다."
+    />
   );
 }

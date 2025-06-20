@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { DataTable, Column } from "@/app/components/data/data-table";
 import { z } from "zod";
 import { VehicleSchema, Vehicle } from "@/app/types/database/vehicle";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import GenericSearchBar from "@/app/components/data/search-bar";
+import SearchTableSection from "@/app/components/data/search-table-section";
+import { Column } from "@/app/components/data/data-table";
 
 type VehicleColumnDef = {
   key: keyof Vehicle;
@@ -56,27 +56,23 @@ const vehicleColumnDefs: VehicleColumnDef[] = [
 
 const fields = vehicleColumnDefs.map(({ key, label }) => ({ key, label }));
 
+const columns: Column<Vehicle>[] = vehicleColumnDefs.map((def) => ({
+  header: def.label,
+  accessor: def.key,
+  ...(def.cell ? { cell: def.cell } : {}),
+}));
+
 export default function VehicleTableWithSearch({ initialVehicles }: Props) {
   const [vehicles, setVehicles] = useState(initialVehicles);
 
-  const columns: Column<Vehicle>[] = vehicleColumnDefs.map((def) => ({
-    header: def.label,
-    accessor: def.key,
-    ...(def.cell ? { cell: def.cell } : {}),
-  }));
-
   return (
-    <div className="flex flex-col gap-4">
-      <GenericSearchBar
-        fields={fields}
-        setDataAction={setVehicles}
-        apiPath="vehicle"
-      />
-      <DataTable
-        data={vehicles}
-        columns={columns}
-        emptyMessage="데이터가 없습니다."
-      />
-    </div>
+    <SearchTableSection
+      fields={fields}
+      setDataAction={setVehicles}
+      apiPath="vehicle"
+      data={vehicles}
+      columns={columns}
+      emptyMessage="데이터가 없습니다."
+    />
   );
 }

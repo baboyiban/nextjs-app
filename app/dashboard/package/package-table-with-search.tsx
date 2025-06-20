@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { DataTable, Column } from "@/app/components/data/data-table";
 import { z } from "zod";
 import { PackageSchema, Package } from "@/app/types/database/package";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import GenericSearchBar from "@/app/components/data/search-bar";
 import { formatDateTimeISO } from "@/app/utils/format";
+import SearchTableSection from "@/app/components/data/search-table-section";
+import { DataTable, Column } from "@/app/components/data/data-table";
 
 type PackageColumnDef = {
   key: keyof Package;
@@ -54,30 +54,25 @@ const packageColumnDefs: PackageColumnDef[] = [
   },
 ];
 
-// 검색바 필드: 컬럼 정의에서 추출 (중복 없음)
 const fields = packageColumnDefs.map(({ key, label }) => ({ key, label }));
+
+const columns: Column<Package>[] = packageColumnDefs.map((def) => ({
+  header: def.label,
+  accessor: def.key,
+  ...(def.cell ? { cell: def.cell } : {}),
+}));
 
 export default function PackageTableWithSearch({ initialPackages }: Props) {
   const [packages, setPackages] = useState(initialPackages);
 
-  const columns: Column<Package>[] = packageColumnDefs.map((def) => ({
-    header: def.label,
-    accessor: def.key,
-    ...(def.cell ? { cell: def.cell } : {}),
-  }));
-
   return (
-    <div className="flex flex-col gap-4">
-      <GenericSearchBar
-        fields={fields}
-        setDataAction={setPackages}
-        apiPath="package"
-      />
-      <DataTable
-        data={packages}
-        columns={columns}
-        emptyMessage="데이터가 없습니다."
-      />
-    </div>
+    <SearchTableSection
+      fields={fields}
+      setDataAction={setPackages}
+      apiPath="package"
+      data={packages}
+      columns={columns}
+      emptyMessage="데이터가 없습니다."
+    />
   );
 }

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { DataTable, Column } from "@/app/components/data/data-table";
 import { z } from "zod";
 import { RegionSchema, Region } from "@/app/types/database/region";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import GenericSearchBar from "@/app/components/data/search-bar";
+import SearchTableSection from "@/app/components/data/search-table-section";
+import { Column } from "@/app/components/data/data-table";
 
 type RegionColumnDef = {
   key: keyof Region;
@@ -46,30 +46,25 @@ const regionColumnDefs: RegionColumnDef[] = [
   },
 ];
 
-// 검색바 필드
 const fields = regionColumnDefs.map(({ key, label }) => ({ key, label }));
+
+const columns: Column<Region>[] = regionColumnDefs.map((def) => ({
+  header: def.label,
+  accessor: def.key,
+  ...(def.cell ? { cell: def.cell } : {}),
+}));
 
 export default function RegionTableWithSearch({ initialRegions }: Props) {
   const [regions, setRegions] = useState(initialRegions);
 
-  const columns: Column<Region>[] = regionColumnDefs.map((def) => ({
-    header: def.label,
-    accessor: def.key,
-    ...(def.cell ? { cell: def.cell } : {}),
-  }));
-
   return (
-    <div className="flex flex-col gap-4">
-      <GenericSearchBar
-        fields={fields}
-        setDataAction={setRegions}
-        apiPath="region"
-      />
-      <DataTable
-        data={regions}
-        columns={columns}
-        emptyMessage="데이터가 없습니다."
-      />
-    </div>
+    <SearchTableSection
+      fields={fields}
+      setDataAction={setRegions}
+      apiPath="region"
+      data={regions}
+      columns={columns}
+      emptyMessage="데이터가 없습니다."
+    />
   );
 }

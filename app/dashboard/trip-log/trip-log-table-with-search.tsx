@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { DataTable, Column } from "@/app/components/data/data-table";
 import { z } from "zod";
 import { TripLogSchema, TripLog } from "@/app/types/database/trip-log";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import GenericSearchBar from "@/app/components/data/search-bar";
+import SearchTableSection from "@/app/components/data/search-table-section";
+import { Column } from "@/app/components/data/data-table";
 import { formatDateTimeISO } from "@/app/utils/format";
 
 type TripLogColumnDef = {
@@ -56,27 +56,23 @@ const tripLogColumnDefs: TripLogColumnDef[] = [
 
 const fields = tripLogColumnDefs.map(({ key, label }) => ({ key, label }));
 
+const columns: Column<TripLog>[] = tripLogColumnDefs.map((def) => ({
+  header: def.label,
+  accessor: def.key,
+  ...(def.cell ? { cell: def.cell } : {}),
+}));
+
 export default function TripLogTableWithSearch({ initialTripLogs }: Props) {
   const [tripLogs, setTripLogs] = useState(initialTripLogs);
 
-  const columns: Column<TripLog>[] = tripLogColumnDefs.map((def) => ({
-    header: def.label,
-    accessor: def.key,
-    ...(def.cell ? { cell: def.cell } : {}),
-  }));
-
   return (
-    <div className="flex flex-col gap-4">
-      <GenericSearchBar
-        fields={fields}
-        setDataAction={setTripLogs}
-        apiPath="trip-log"
-      />
-      <DataTable
-        data={tripLogs}
-        columns={columns}
-        emptyMessage="데이터가 없습니다."
-      />
-    </div>
+    <SearchTableSection
+      fields={fields}
+      setDataAction={setTripLogs}
+      apiPath="trip-log"
+      data={tripLogs}
+      columns={columns}
+      emptyMessage="데이터가 없습니다."
+    />
   );
 }

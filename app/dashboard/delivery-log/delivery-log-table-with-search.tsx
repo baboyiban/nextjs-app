@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { DataTable, Column } from "@/app/components/data/data-table";
 import { z } from "zod";
 import {
   DeliveryLogSchema,
   DeliveryLog,
 } from "@/app/types/database/delivery-log";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import GenericSearchBar from "@/app/components/data/search-bar";
+import SearchTableSection from "@/app/components/data/search-table-section";
+import { Column } from "@/app/components/data/data-table";
 import { formatDateTimeISO } from "@/app/utils/format";
 
 type DeliveryLogColumnDef = {
@@ -80,29 +80,25 @@ const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
 
 const fields = deliveryLogColumnDefs.map(({ key, label }) => ({ key, label }));
 
+const columns: Column<DeliveryLog>[] = deliveryLogColumnDefs.map((def) => ({
+  header: def.label,
+  accessor: def.key,
+  ...(def.cell ? { cell: def.cell } : {}),
+}));
+
 export default function DeliveryLogTableWithSearch({
   initialDeliveryLogs,
 }: Props) {
   const [deliveryLogs, setDeliveryLogs] = useState(initialDeliveryLogs);
 
-  const columns: Column<DeliveryLog>[] = deliveryLogColumnDefs.map((def) => ({
-    header: def.label,
-    accessor: def.key,
-    ...(def.cell ? { cell: def.cell } : {}),
-  }));
-
   return (
-    <div className="flex flex-col gap-4">
-      <GenericSearchBar
-        fields={fields}
-        setDataAction={setDeliveryLogs}
-        apiPath="delivery-log"
-      />
-      <DataTable
-        data={deliveryLogs}
-        columns={columns}
-        emptyMessage="데이터가 없습니다."
-      />
-    </div>
+    <SearchTableSection
+      fields={fields}
+      setDataAction={setDeliveryLogs}
+      apiPath="delivery-log"
+      data={deliveryLogs}
+      columns={columns}
+      emptyMessage="데이터가 없습니다."
+    />
   );
 }
