@@ -19,7 +19,7 @@ type Props = {
 };
 
 const tripLogColumnDefs: TripLogColumnDef[] = [
-  { key: "trip_id", label: "여행 ID" },
+  { key: "trip_id", label: "운행 ID" },
   { key: "vehicle_id", label: "차량 ID" },
   {
     key: "start_time",

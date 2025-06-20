@@ -22,7 +22,7 @@ type Props = {
 };
 
 const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
-  { key: "trip_id", label: "여행 ID" },
+  { key: "trip_id", label: "운행 ID" },
   { key: "package_id", label: "패키지 ID" },
   { key: "region_id", label: "구역 ID" },
   { key: "load_order", label: "적재 순서" },

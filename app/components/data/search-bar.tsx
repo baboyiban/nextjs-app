@@ -22,6 +22,8 @@ export default function SearchBar({
     Object.fromEntries(fields.map((f) => [f.key, ""])),
   );
   const [loading, setLoading] = useState(false);
+  const [sortField, setSortField] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const handleChange = (key: string, value: string) => {
     setValues((prev) => ({
@@ -37,6 +39,13 @@ export default function SearchBar({
       Object.entries(values).forEach(([key, value]) => {
         if (value !== "" && value !== undefined) params.append(key, value);
       });
+      // 정렬 파라미터 추가
+      if (sortField) {
+        params.append(
+          "sort",
+          sortOrder === "desc" ? `-${sortField}` : sortField,
+        );
+      }
       const res = await fetch(`/api/${apiPath}/search?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
@@ -67,6 +76,28 @@ export default function SearchBar({
           className="w-[8rem] p-[0.5rem] rounded-lg bg-gray"
         />
       ))}
+      {/* 정렬 기준 select */}
+      <select
+        value={sortField}
+        onChange={(e) => setSortField(e.target.value)}
+        className="appearance-none w-[8rem] p-[0.5rem] rounded-lg bg-gray"
+      >
+        <option value="">정렬 기준</option>
+        {fields.map((field) => (
+          <option key={field.key} value={field.key}>
+            {field.label}
+          </option>
+        ))}
+      </select>
+      {/* 정렬 방향 select */}
+      <select
+        value={sortOrder}
+        onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+        className="appearance-none w-[8rem] p-[0.5rem] rounded-lg bg-gray"
+      >
+        <option value="asc">오름차순</option>
+        <option value="desc">내림차순</option>
+      </select>
       <button
         onClick={handleSearch}
         disabled={loading}

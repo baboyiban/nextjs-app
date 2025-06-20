@@ -17,7 +17,6 @@ export function DataTable<T>({
   columns,
   emptyMessage = "데이터가 없습니다.",
 }: DataTableProps<T>) {
-  // 방어 코드 추가: data가 배열이 아니거나 비어있으면 메시지 출력
   if (!Array.isArray(data) || data.length === 0) {
     return <div className="p-[1rem]">{emptyMessage}</div>;
   }
