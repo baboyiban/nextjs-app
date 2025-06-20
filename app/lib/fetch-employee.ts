@@ -5,7 +5,6 @@ import { getData } from "./get-data";
 function transformRawEmployee(rawItem: any): Employee {
   const transformed: Employee = {
     employee_id: rawItem.employee_id,
-    password: rawItem.password,
     position: rawItem.position,
     is_active: rawItem.is_active,
   };
@@ -13,7 +12,7 @@ function transformRawEmployee(rawItem: any): Employee {
 }
 
 export const fetchEmployee = async (url?: string): Promise<Employee[]> => {
-  const fullUrl = `${process.env.API_BASE_URL}/api/employee${url ? `/${url}` : ""}`;
+  const fullUrl = `/api/employee${url ? `/${url}` : ""}`;
   const validateStatus = (status: number) => status >= 200 && status < 300;
 
   const rawData = await getData<any>(fullUrl, validateStatus);

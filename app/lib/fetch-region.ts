@@ -1,24 +1,22 @@
-import { createFetcher } from "./create-fetcher";
 import { Region, RegionSchema } from "../types/database/region";
+import { getData } from "./get-data";
 
-// API 응답을 Region 스키마에 맞게 변환하는 함수
-function transformRawRegion(rawItem: any): Region {
-  const transformed: Region = {
-    region_id: rawItem.region_id,
-    region_name: rawItem.region_name,
-    coord_x: rawItem.coord_x,
-    coord_y: rawItem.coord_y,
-    max_capacity: rawItem.max_capacity,
-    current_capacity: rawItem.current_capacity,
-    is_full: rawItem.is_full,
-    // saturated_at: 빈 문자열을 null로 처리
-    saturated_at: rawItem.saturated_at === "" ? null : rawItem.saturated_at,
+function transformRawRegion(raw: any): Region {
+  return {
+    region_id: raw.region_id,
+    region_name: raw.region_name,
+    coord_x: raw.coord_x,
+    coord_y: raw.coord_y,
+    max_capacity: raw.max_capacity,
+    current_capacity: raw.current_capacity,
+    is_full: raw.is_full,
+    saturated_at: raw.saturated_at === "" ? null : raw.saturated_at,
   };
-  return transformed;
 }
 
-export const fetchRegion = async (url?: string): Promise<Region[]> => {
-  const rawData = await createFetcher("region")(url);
-  const transformedData = rawData.map(transformRawRegion);
-  return RegionSchema.array().parse(transformedData);
-};
+export async function fetchRegion(url?: string): Promise<Region[]> {
+  const apiUrl = `/api/region${url ? `/${url}` : ""}`;
+  const rawData = await getData<any>(apiUrl);
+  const data = rawData.map(transformRawRegion);
+  return RegionSchema.array().parse(data);
+}

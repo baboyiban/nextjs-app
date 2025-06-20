@@ -1,22 +1,19 @@
-import { createFetcher } from "./create-fetcher";
 import { Package, PackageSchema } from "../types/database/package";
+import { getData } from "./get-data";
 
-// API 응답을 Package 스키마에 맞게 변환하는 함수
-function transformRawPackage(rawItem: any): Package {
-  const transformed: Package = {
-    package_id: rawItem.package_id,
-    package_type: rawItem.package_type,
-    region_id: rawItem.region_id,
-    package_status: rawItem.package_status,
-    // registered_at은 string | null 이므로, API가 보내는 그대로 사용
-    // 단, 빈 문자열이 오면 null로 처리 (스키마는 string | null을 기대)
-    registered_at: rawItem.registered_at === "" ? null : rawItem.registered_at,
+function transformRawPackage(raw: any): Package {
+  return {
+    package_id: raw.package_id,
+    package_type: raw.package_type,
+    region_id: raw.region_id,
+    package_status: raw.package_status,
+    registered_at: raw.registered_at === "" ? null : raw.registered_at,
   };
-  return transformed;
 }
 
-export const fetchPackage = async (url?: string): Promise<Package[]> => {
-  const rawData = await createFetcher("package")(url);
-  const transformedData = rawData.map(transformRawPackage);
-  return PackageSchema.array().parse(transformedData);
-};
+export async function fetchPackage(url?: string): Promise<Package[]> {
+  const apiUrl = `/api/package${url ? `/${url}` : ""}`;
+  const rawData = await getData<any>(apiUrl);
+  const data = rawData.map(transformRawPackage);
+  return PackageSchema.array().parse(data);
+}

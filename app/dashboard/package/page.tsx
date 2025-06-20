@@ -44,7 +44,7 @@ export default async function PackagePage() {
       fetcher={fetchPackage}
       schema={PackageSchema}
       columns={columns}
-      errorMessage="패키지 정보를 불러오지 못했습니다."
+      errorMessage="택배 정보를 불러오지 못했습니다."
     />
   );
 }

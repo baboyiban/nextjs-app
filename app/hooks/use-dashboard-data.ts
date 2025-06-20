@@ -8,6 +8,13 @@ import { Package } from "@/app/types/database/package";
 
 const UPDATE_INTERVAL = 1000; // 1초
 
+function getToken() {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("token");
+  }
+  return null;
+}
+
 interface DashboardData {
   regions: Region[];
   vehicles: Vehicle[];
@@ -25,12 +32,15 @@ export function useDashboardData(): DashboardData {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchData = async () => {
+    const token = getToken();
+    const headers: HeadersInit = {};
+    if (token) headers["Authorization"] = `Bearer ${token}`;
     try {
       const [regionsResponse, vehiclesResponse, packagesResponse] =
         await Promise.all([
-          fetch("/api/regions"),
-          fetch("/api/vehicles"),
-          fetch("/api/packages"),
+          fetch("/api/region", { headers }),
+          fetch("/api/vehicle", { headers }),
+          fetch("/api/package", { headers }),
         ]);
 
       if (regionsResponse.ok && vehiclesResponse.ok && packagesResponse.ok) {
@@ -53,13 +63,11 @@ export function useDashboardData(): DashboardData {
   };
 
   useEffect(() => {
-    // 대시보드 페이지일 때만 데이터 요청
     if (pathname === "/dashboard") {
       fetchData();
       const interval = setInterval(fetchData, UPDATE_INTERVAL);
       return () => clearInterval(interval);
     } else {
-      // 대시보드 페이지가 아닐 때는 로딩 상태만 변경
       setLoading(false);
     }
   }, [pathname]);

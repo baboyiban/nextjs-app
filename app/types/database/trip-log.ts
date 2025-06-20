@@ -6,6 +6,7 @@ export const TripLogSchema = z.object({
   start_time: z.date().optional(),
   end_time: z.date().optional(),
   status: z.enum(["운송중", "비운송중"]),
+  destination: z.string().length(3).optional(), // 추가
 });
 
 export type TripLog = z.infer<typeof TripLogSchema>;

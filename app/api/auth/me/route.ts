@@ -1,59 +1,46 @@
 import { cookies } from "next/headers";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const cookieStore = await cookies();
-    const authCookie = cookieStore.get("auth");
-
-    if (!authCookie?.value) {
+    const token = cookieStore.get("token")?.value ?? null;
+    if (!token) {
       return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
     }
 
-    let authData;
-    try {
-      authData = JSON.parse(authCookie.value);
-    } catch (parseError) {
-      console.error("쿠키 파싱 오류:", parseError);
-      return Response.json(
-        { error: "인증 정보가 손상되었습니다. 다시 로그인해주세요." },
-        { status: 401 },
-      );
-    }
-
-    // 필수 필드 검증
-    if (!authData || !authData.logged_in || !authData.employee_id) {
-      return Response.json(
-        { error: "유효하지 않은 인증 정보입니다. 다시 로그인해주세요." },
-        { status: 401 },
-      );
-    }
-
-    // 로그인 시간 확인 (옵션)
-    if (authData.login_time) {
-      const loginTime = new Date(authData.login_time);
-      const now = new Date();
-      const timeDiff = now.getTime() - loginTime.getTime();
-      const hoursElapsed = timeDiff / (1000 * 60 * 60);
-
-      if (hoursElapsed > 8) {
-        // 8시간 초과시 재로그인 요구
-        return Response.json(
-          { error: "세션이 만료되었습니다. 다시 로그인해주세요." },
-          { status: 401 },
-        );
-      }
-    }
-
-    return Response.json({
-      employee_id: authData.employee_id,
-      position: authData.position,
-      logged_in: true,
-      login_time: authData.login_time,
+    // 토큰을 Authorization 헤더에 포함시켜 전송
+    const response = await fetch(`${process.env.API_BASE_URL}/api/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      // credentials: "include" 제거 - 이제 쿠키가 아닌 헤더로 전송
     });
+
+    const responseBody = await response.text();
+
+    if (!response.ok) {
+      // Go API가 401/500 등 에러를 반환하면 그대로 전달
+      return Response.json(
+        { error: "인증 실패", detail: responseBody },
+        { status: response.status },
+      );
+    }
+
+    let user;
+    try {
+      user = JSON.parse(responseBody);
+    } catch (e) {
+      console.error("JSON 파싱 오류:", e, responseBody);
+      return Response.json(
+        { error: "응답 파싱 오류", detail: responseBody },
+        { status: 500 },
+      );
+    }
+    return Response.json(user);
   } catch (error) {
-    console.error("인증 확인 오류:", error);
+    console.error("auth/me 처리 중 오류:", error);
     return Response.json(
-      { error: "인증 확인 중 오류가 발생했습니다." },
+      { error: "인증 처리 중 오류가 발생했습니다." },
       { status: 500 },
     );
   }

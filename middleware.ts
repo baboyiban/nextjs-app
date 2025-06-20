@@ -4,47 +4,16 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 보호된 경로 정의
-  const isProtectedPath = pathname.startsWith("/dashboard");
-
-  // API 경로는 별도 처리
+  // API 경로는 미들웨어에서 인증 체크하지 않음
   const isApiPath = pathname.startsWith("/api");
-
-  // 로그인 관련 API는 통과
-  if (isApiPath && pathname.startsWith("/api/auth")) {
-    return NextResponse.next();
-  }
-
-  // 인증이 필요한 API 경로 보호
-  if (isApiPath && isProtectedPath) {
-    const authCookie = request.cookies.get("auth");
-    if (!authCookie?.value) {
-      return new Response(JSON.stringify({ error: "인증이 필요합니다." }), {
-        status: 401,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    }
-  }
-
-  // 인증 쿠키 확인
-  const authCookie = request.cookies.get("auth");
-
-  // 보호된 경로에 인증 없이 접근하는 경우
-  if (isProtectedPath && !authCookie?.value) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
 
   // 루트 경로 접근 시 적절한 페이지로 리다이렉트
   if (pathname === "/") {
-    if (authCookie?.value) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    } else {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+    // 클라이언트에서 토큰을 보고 리다이렉트 처리해야 함
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  // 그 외에는 미들웨어에서 인증 체크 없이 통과
   return NextResponse.next();
 }
 
