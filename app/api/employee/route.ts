@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 export async function GET() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
+  console.log("token", token);
+
   if (!token) {
     return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
   }
