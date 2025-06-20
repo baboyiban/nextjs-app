@@ -2,11 +2,7 @@ import React from "react";
 
 export type Column<T> = {
   header: string;
-  // accessor는 이제 항상 keyof T 또는 함수여야 합니다.
-  // cell이 정의되지 않은 경우 accessor의 결과가 직접 렌더링됩니다.
   accessor: keyof T | ((item: T) => React.ReactNode);
-  // cell은 accessor가 keyof T일 때 커스텀 렌더링을 제공하거나,
-  // accessor가 함수일 때 그 결과를 오버라이드할 수 있습니다.
   cell?: (item: T) => React.ReactNode;
 };
 
@@ -21,7 +17,8 @@ export function DataTable<T>({
   columns,
   emptyMessage = "데이터가 없습니다.",
 }: DataTableProps<T>) {
-  if (data.length === 0) {
+  // 방어 코드 추가: data가 배열이 아니거나 비어있으면 메시지 출력
+  if (!Array.isArray(data) || data.length === 0) {
     return <div className="p-[1rem]">{emptyMessage}</div>;
   }
 
