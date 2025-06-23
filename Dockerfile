@@ -15,9 +15,9 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=$NODE_ENV
-ENV PORT=$PORT
-ENV API_URL=$API_URL
-ENV BASE_URL=$BASE_URL
+ENV FRONTEND_PORT=$FRONTEND_PORT
+ENV BACKEND_URL=$BACKEND_URL
+ENV FRONTEND_URL=$FRONTEND_URL
 ENV JWT_SECRET=$JWT_SECRET
 
 COPY --from=builder /app/.next ./.next
@@ -25,6 +25,6 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 
-EXPOSE $PORT
+EXPOSE $FRONTEND_PORT
 
 CMD ["npm", "run", "start"]

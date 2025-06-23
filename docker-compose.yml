@@ -6,12 +6,12 @@ services:
       dockerfile: Dockerfile
     container_name: nextjs-app
     ports:
-      - "$PORT:${PORT}"
+      - "$FRONTEND_PORT:${FRONTEND_PORT}"
     env_file: .env
     environment:
       - NODE_ENV=production
-      - PORT=${PORT}
-      - API_URL=${API_URL}
-      - BASE_URL=${BASE_URL}
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - BACKEND_URL=${BACKEND_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
       - JWT_SECRET=${JWT_SECRET}
     restart: unless-stopped
