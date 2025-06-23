@@ -1,4 +1,3 @@
-import { Package } from "../types/database/package";
 import { Vehicle } from "../types/database/vehicle";
 
 // 차량별 맵 크기 정의

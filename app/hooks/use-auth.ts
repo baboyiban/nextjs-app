@@ -32,6 +32,7 @@ export function useAuth() {
         if (pathname.startsWith("/dashboard")) router.replace("/login");
       }
     } catch (error) {
+      console.error("네트워크 오류: " + error);
       setUser(null);
       if (pathname.startsWith("/dashboard")) router.replace("/login");
     } finally {
@@ -82,6 +83,7 @@ export function useAuth() {
         return { success: false, error: data.error, status: response.status };
       }
     } catch (error) {
+      console.log("네트워크 오류: " + error);
       setLoading(false);
       return { success: false, error: "네트워크 오류", status: 0 };
     }

@@ -10,7 +10,6 @@ import {
   getEmptySpacesForVehicle,
   VEHICLE_MAP_CONFIG,
 } from "@/app/utils/dashboard";
-import VehicleSummary from "./vehicle-summary";
 
 interface GridMapProps {
   regions: Region[];

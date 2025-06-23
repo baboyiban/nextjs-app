@@ -53,7 +53,7 @@ export default function LoginPage() {
       }
       // 리다이렉트는 middleware에서 처리됨
     } catch (error) {
-      setError("네트워크 오류");
+      setError("네트워크 오류: " + error);
     } finally {
       setLoading(false);
     }
