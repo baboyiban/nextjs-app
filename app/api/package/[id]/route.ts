@@ -1,14 +1,6 @@
 import { NextRequest } from "next/server";
-import { getAuthToken, fetchWithAuth } from "../../_utils";
+import { handleById } from "../../_shared/handler";
 
-export async function GET(request: NextRequest, { params }: any) {
-  const token = await getAuthToken();
-  if (!token) {
-    return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
-  }
-  const { data, status } = await fetchWithAuth(
-    `${process.env.API_URL}/api/package/${params.id}`,
-    token,
-  );
-  return Response.json(data, { status });
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  return handleById(request, "package", params.id);
 }

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
-import { searchHandler } from "../_shared/searchHandler";
+import { handleList } from "../_shared/handler";
 
 export async function GET(request: NextRequest) {
-  return searchHandler(request, "employee");
+  return handleList(request, "employee");
 }

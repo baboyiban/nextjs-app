@@ -15,7 +15,7 @@ export async function fetchWithAuth(
   const response = await fetch(url, {
     ...options,
     headers: {
-      ...(options.headers || {}),
+      ...options.headers,
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
     },
