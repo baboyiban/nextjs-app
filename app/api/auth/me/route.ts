@@ -8,7 +8,7 @@ export async function GET() {
       return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
     }
 
-    const response = await fetch(`${process.env.API_URL}/api/auth/me`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/api/auth/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

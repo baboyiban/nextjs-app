@@ -7,7 +7,7 @@ export async function handleList(request: NextRequest, entity: string) {
   if (!token) {
     return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
   }
-  const backendUrl = `${process.env.API_URL}/api/${entity}`;
+  const backendUrl = `${process.env.BACKEND_URL}/api/${entity}`;
   const { data, status } = await fetchWithAuth(backendUrl, token);
   return Response.json(data, { status });
 }
@@ -19,7 +19,7 @@ export async function handleSearch(request: NextRequest, entity: string) {
     return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
   }
   const url = new URL(request.url);
-  const backendUrl = `${process.env.API_URL}/api/${entity}/search?${url.searchParams.toString()}`;
+  const backendUrl = `${process.env.BACKEND_URL}/api/${entity}/search?${url.searchParams.toString()}`;
   const { data, status } = await fetchWithAuth(backendUrl, token);
   return Response.json(data, { status });
 }
@@ -34,7 +34,7 @@ export async function handleById(
   if (!token) {
     return Response.json({ error: "로그인이 필요합니다." }, { status: 401 });
   }
-  const backendUrl = `${process.env.API_URL}/api/${entity}/${id}`;
+  const backendUrl = `${process.env.BACKEND_URL}/api/${entity}/${id}`;
   const { data, status } = await fetchWithAuth(backendUrl, token);
   return Response.json(data, { status });
 }

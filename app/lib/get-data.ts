@@ -14,13 +14,16 @@ export async function getData<T>(
       .map((c) => `${c.name}=${c.value}`)
       .join("; ");
 
-    const response = await axios.get<T[]>(`${process.env.BASE_URL}/${url}`, {
-      headers: {
-        cookie: cookieHeader,
+    const response = await axios.get<T[]>(
+      `${process.env.FRONTEND_URL}/${url}`,
+      {
+        headers: {
+          cookie: cookieHeader,
+        },
+        validateStatus,
+        timeout: 5000,
       },
-      validateStatus,
-      timeout: 5000,
-    });
+    );
     return response.data || [];
   } catch (error) {
     const errorMessage =
