@@ -1,7 +1,15 @@
 import { fetchVehicle } from "@/app/lib/fetch-vehicle";
+import DataPage from "../data-page";
 import VehicleTableWithSearch from "./vehicle-table-with-search";
 
-export default async function VehiclePage() {
-  const vehicles = await fetchVehicle();
-  return <VehicleTableWithSearch initialVehicles={vehicles} />;
+export const dynamic = "force-dynamic";
+
+export default function VehiclePage() {
+  return (
+    <DataPage
+      fetcher={fetchVehicle}
+      Component={VehicleTableWithSearch}
+      componentProps={{}}
+    />
+  );
 }

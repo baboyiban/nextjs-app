@@ -6,25 +6,19 @@ import { PackageSchema, Package } from "@/app/types/database/package";
 import { StatusBadge } from "@/app/components/ui/status-badge";
 import { formatDateTimeISO } from "@/app/utils/format";
 import SearchTableSection from "@/app/components/data/search-table-section";
-import { DataTable, Column } from "@/app/components/data/data-table";
-
-type PackageColumnDef = {
-  key: keyof Package;
-  label: string;
-  cell?: (item: Package) => React.ReactNode;
-};
+import { Column } from "@/app/components/data/data-table";
 
 type Props = {
-  initialPackages: z.infer<typeof PackageSchema>[];
+  initialData: z.infer<typeof PackageSchema>[];
 };
 
-const packageColumnDefs: PackageColumnDef[] = [
-  { key: "package_id", label: "패키지 ID" },
-  { key: "package_type", label: "패키지 타입" },
-  { key: "region_id", label: "구역 ID" },
+const packageColumnDefs: Column<Package>[] = [
+  { header: "패키지 ID", accessor: "package_id" },
+  { header: "패키지 타입", accessor: "package_type" },
+  { header: "구역 ID", accessor: "region_id" },
   {
-    key: "package_status",
-    label: "패키지 상태",
+    header: "패키지 상태",
+    accessor: "package_status",
     cell: (item) => (
       <StatusBadge
         status={item.package_status}
@@ -43,8 +37,8 @@ const packageColumnDefs: PackageColumnDef[] = [
     ),
   },
   {
-    key: "registered_at",
-    label: "등록 시각",
+    header: "등록 시각",
+    accessor: "registered_at",
     cell: (item) =>
       item.registered_at ? (
         formatDateTimeISO(item.registered_at)
@@ -54,24 +48,19 @@ const packageColumnDefs: PackageColumnDef[] = [
   },
 ];
 
-const fields = packageColumnDefs.map(({ key, label }) => ({ key, label }));
-
-const columns: Column<Package>[] = packageColumnDefs.map((def) => ({
-  header: def.label,
-  accessor: def.key,
-  ...(def.cell ? { cell: def.cell } : {}),
-}));
-
-export default function PackageTableWithSearch({ initialPackages }: Props) {
-  const [packages, setPackages] = useState(initialPackages);
+export default function PackageTableWithSearch({ initialData }: Props) {
+  const [packages, setPackages] = useState(initialData);
 
   return (
     <SearchTableSection
-      fields={fields}
+      fields={packageColumnDefs.map(({ header, accessor }) => ({
+        key: accessor as string,
+        label: header,
+      }))}
       setDataAction={setPackages}
       apiPath="package"
       data={packages}
-      columns={columns}
+      columns={packageColumnDefs}
       emptyMessage="데이터가 없습니다."
     />
   );

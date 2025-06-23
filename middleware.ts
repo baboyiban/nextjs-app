@@ -18,6 +18,24 @@ async function getUserFromToken(token: string) {
   }
 }
 
+// 권한 확인 함수
+function hasAccess(user: any, pathname: string): boolean {
+  if (user.position === "관리직") {
+    return true; // 관리직은 모든 경로 접근 가능
+  }
+
+  if (user.position === "운송직") {
+    // 운송직은 특정 경로만 접근 가능
+    return (
+      pathname.startsWith("/dashboard/package") ||
+      pathname.startsWith("/dashboard/trip-log") ||
+      pathname.startsWith("/dashboard/delivery-log")
+    );
+  }
+
+  return false; // 기타 권한은 모두 차단
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -47,22 +65,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // 관리직은 모든 경로 접근 허용
-  if (user.position === "관리직") {
-    return NextResponse.next();
+  // 권한 확인
+  if (!hasAccess(user, pathname)) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
-  // 운송직은 예시로 /package, /trip-log, /delivery-log만 허용
-  if (user.position === "운송직") {
-    if (pathname.startsWith("/dashboard/package")) {
-      return NextResponse.next();
-    } else {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
-  }
-
-  // 기타 권한은 모두 차단
-  return NextResponse.redirect(new URL("/unauthorized", request.url));
+  // 동적 렌더링 헤더 추가
+  const response = NextResponse.next();
+  response.headers.set("x-nextjs-dynamic", "force-dynamic");
+  return response;
 }
 
 export const config = {

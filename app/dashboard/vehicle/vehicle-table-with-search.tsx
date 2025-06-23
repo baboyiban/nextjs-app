@@ -7,24 +7,18 @@ import { StatusBadge } from "@/app/components/ui/status-badge";
 import SearchTableSection from "@/app/components/data/search-table-section";
 import { Column } from "@/app/components/data/data-table";
 
-type VehicleColumnDef = {
-  key: keyof Vehicle;
-  label: string;
-  cell?: (item: Vehicle) => React.ReactNode;
-};
-
 type Props = {
-  initialVehicles: z.infer<typeof VehicleSchema>[];
+  initialData: z.infer<typeof VehicleSchema>[];
 };
 
-const vehicleColumnDefs: VehicleColumnDef[] = [
-  { key: "internal_id", label: "내부 ID" },
-  { key: "vehicle_id", label: "차량 ID" },
-  { key: "current_load", label: "현재 적재량" },
-  { key: "max_load", label: "최대 적재량" },
+const vehicleColumnDefs: Column<Vehicle>[] = [
+  { header: "내부 ID", accessor: "internal_id" },
+  { header: "차량 ID", accessor: "vehicle_id" },
+  { header: "현재 적재량", accessor: "current_load" },
+  { header: "최대 적재량", accessor: "max_load" },
   {
-    key: "led_status",
-    label: "LED 상태",
+    header: "LED 상태",
+    accessor: "led_status",
     cell: (item) => (
       <StatusBadge
         status={item.led_status || "N/A"}
@@ -41,8 +35,8 @@ const vehicleColumnDefs: VehicleColumnDef[] = [
     ),
   },
   {
-    key: "needs_confirmation",
-    label: "확인 필요",
+    header: "확인 필요",
+    accessor: "needs_confirmation",
     cell: (item) => (
       <StatusBadge
         status={item.needs_confirmation ? "필요" : "불필요"}
@@ -50,28 +44,23 @@ const vehicleColumnDefs: VehicleColumnDef[] = [
       />
     ),
   },
-  { key: "coord_x", label: "좌표 X" },
-  { key: "coord_y", label: "좌표 Y" },
+  { header: "좌표 X", accessor: "coord_x" },
+  { header: "좌표 Y", accessor: "coord_y" },
 ];
 
-const fields = vehicleColumnDefs.map(({ key, label }) => ({ key, label }));
-
-const columns: Column<Vehicle>[] = vehicleColumnDefs.map((def) => ({
-  header: def.label,
-  accessor: def.key,
-  ...(def.cell ? { cell: def.cell } : {}),
-}));
-
-export default function VehicleTableWithSearch({ initialVehicles }: Props) {
-  const [vehicles, setVehicles] = useState(initialVehicles);
+export default function VehicleTableWithSearch({ initialData }: Props) {
+  const [vehicles, setVehicles] = useState(initialData);
 
   return (
     <SearchTableSection
-      fields={fields}
+      fields={vehicleColumnDefs.map(({ header, accessor }) => ({
+        key: accessor as string,
+        label: header,
+      }))}
       setDataAction={setVehicles}
       apiPath="vehicle"
       data={vehicles}
-      columns={columns}
+      columns={vehicleColumnDefs}
       emptyMessage="데이터가 없습니다."
     />
   );

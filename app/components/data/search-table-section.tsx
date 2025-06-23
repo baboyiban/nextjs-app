@@ -1,6 +1,5 @@
 "use client";
 
-import { ReactNode } from "react";
 import SearchBar, { Field } from "./search-bar";
 import { Column, DataTable } from "./data-table";
 

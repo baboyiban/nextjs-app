@@ -11,24 +11,18 @@ import SearchTableSection from "@/app/components/data/search-table-section";
 import { Column } from "@/app/components/data/data-table";
 import { formatDateTimeISO } from "@/app/utils/format";
 
-type DeliveryLogColumnDef = {
-  key: keyof DeliveryLog;
-  label: string;
-  cell?: (item: DeliveryLog) => React.ReactNode;
-};
-
 type Props = {
-  initialDeliveryLogs: z.infer<typeof DeliveryLogSchema>[];
+  initialData: z.infer<typeof DeliveryLogSchema>[];
 };
 
-const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
-  { key: "trip_id", label: "운행 ID" },
-  { key: "package_id", label: "패키지 ID" },
-  { key: "region_id", label: "구역 ID" },
-  { key: "load_order", label: "적재 순서" },
+const deliveryLogColumnDefs: Column<DeliveryLog>[] = [
+  { header: "운행 ID", accessor: "trip_id" },
+  { header: "패키지 ID", accessor: "package_id" },
+  { header: "구역 ID", accessor: "region_id" },
+  { header: "적재 순서", accessor: "load_order" },
   {
-    key: "registered_at",
-    label: "등록 시각",
+    header: "등록 시각",
+    accessor: "registered_at",
     cell: (item) =>
       item.registered_at ? (
         formatDateTimeISO(item.registered_at as any)
@@ -37,8 +31,8 @@ const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
       ),
   },
   {
-    key: "first_transport_time",
-    label: "첫 운송 시각",
+    header: "첫 운송 시각",
+    accessor: "first_transport_time",
     cell: (item) =>
       item.first_transport_time ? (
         formatDateTimeISO(item.first_transport_time as any)
@@ -47,8 +41,8 @@ const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
       ),
   },
   {
-    key: "input_time",
-    label: "투입 시각",
+    header: "투입 시각",
+    accessor: "input_time",
     cell: (item) =>
       item.input_time ? (
         formatDateTimeISO(item.input_time as any)
@@ -57,8 +51,8 @@ const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
       ),
   },
   {
-    key: "second_transport_time",
-    label: "두 운송 시각",
+    header: "두 운송 시각",
+    accessor: "second_transport_time",
     cell: (item) =>
       item.second_transport_time ? (
         formatDateTimeISO(item.second_transport_time as any)
@@ -67,8 +61,8 @@ const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
       ),
   },
   {
-    key: "completed_at",
-    label: "완료 시각",
+    header: "완료 시각",
+    accessor: "completed_at",
     cell: (item) =>
       item.completed_at ? (
         formatDateTimeISO(item.completed_at as any)
@@ -78,26 +72,19 @@ const deliveryLogColumnDefs: DeliveryLogColumnDef[] = [
   },
 ];
 
-const fields = deliveryLogColumnDefs.map(({ key, label }) => ({ key, label }));
-
-const columns: Column<DeliveryLog>[] = deliveryLogColumnDefs.map((def) => ({
-  header: def.label,
-  accessor: def.key,
-  ...(def.cell ? { cell: def.cell } : {}),
-}));
-
-export default function DeliveryLogTableWithSearch({
-  initialDeliveryLogs,
-}: Props) {
-  const [deliveryLogs, setDeliveryLogs] = useState(initialDeliveryLogs);
+export default function DeliveryLogTableWithSearch({ initialData }: Props) {
+  const [deliveryLogs, setDeliveryLogs] = useState(initialData);
 
   return (
     <SearchTableSection
-      fields={fields}
+      fields={deliveryLogColumnDefs.map(({ header, accessor }) => ({
+        key: accessor as string,
+        label: header,
+      }))}
       setDataAction={setDeliveryLogs}
       apiPath="delivery-log"
       data={deliveryLogs}
-      columns={columns}
+      columns={deliveryLogColumnDefs}
       emptyMessage="데이터가 없습니다."
     />
   );

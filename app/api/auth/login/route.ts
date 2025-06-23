@@ -1,11 +1,8 @@
-import { NextRequest } from "next/server";
-import { cookies } from "next/headers";
-
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const response = await fetch(`${process.env.API_BASE_URL}/api/auth/login`, {
+    const response = await fetch(`${process.env.API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,7 +12,6 @@ export async function POST(request: Request) {
 
     const responseText = await response.text();
 
-    // 응답 처리
     if (!response.ok) {
       return Response.json(
         { error: "로그인 실패", details: responseText },
@@ -26,14 +22,12 @@ export async function POST(request: Request) {
     let responseData;
     try {
       responseData = JSON.parse(responseText);
-    } catch (e) {
+    } catch {
       return Response.json({ error: "서버 응답 처리 실패" }, { status: 500 });
     }
 
-    // 쿠키 설정
     const { token } = responseData;
 
-    // 응답 반환
     return Response.json(responseData, {
       headers: {
         "Set-Cookie": `token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${60 * 60 * 8}`,

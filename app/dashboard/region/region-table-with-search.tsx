@@ -7,26 +7,20 @@ import { StatusBadge } from "@/app/components/ui/status-badge";
 import SearchTableSection from "@/app/components/data/search-table-section";
 import { Column } from "@/app/components/data/data-table";
 
-type RegionColumnDef = {
-  key: keyof Region;
-  label: string;
-  cell?: (item: Region) => React.ReactNode;
-};
-
 type Props = {
-  initialRegions: z.infer<typeof RegionSchema>[];
+  initialData: z.infer<typeof RegionSchema>[];
 };
 
-const regionColumnDefs: RegionColumnDef[] = [
-  { key: "region_id", label: "구역 ID" },
-  { key: "region_name", label: "구역 명" },
-  { key: "coord_x", label: "좌표 X" },
-  { key: "coord_y", label: "좌표 Y" },
-  { key: "max_capacity", label: "최대 보관 수량" },
-  { key: "current_capacity", label: "현재 보관 수량" },
+const regionColumnDefs: Column<Region>[] = [
+  { header: "구역 ID", accessor: "region_id" },
+  { header: "구역 명", accessor: "region_name" },
+  { header: "좌표 X", accessor: "coord_x" },
+  { header: "좌표 Y", accessor: "coord_y" },
+  { header: "최대 보관 수량", accessor: "max_capacity" },
+  { header: "현재 보관 수량", accessor: "current_capacity" },
   {
-    key: "is_full",
-    label: "포화 여부",
+    header: "포화 여부",
+    accessor: "is_full",
     cell: (item) => (
       <StatusBadge
         status={item.is_full ? "포화" : "비포화"}
@@ -35,8 +29,8 @@ const regionColumnDefs: RegionColumnDef[] = [
     ),
   },
   {
-    key: "saturated_at",
-    label: "포화 시각",
+    header: "포화 시각",
+    accessor: "saturated_at",
     cell: (item) =>
       item.saturated_at ? (
         new Date(item.saturated_at).toLocaleString()
@@ -46,24 +40,19 @@ const regionColumnDefs: RegionColumnDef[] = [
   },
 ];
 
-const fields = regionColumnDefs.map(({ key, label }) => ({ key, label }));
-
-const columns: Column<Region>[] = regionColumnDefs.map((def) => ({
-  header: def.label,
-  accessor: def.key,
-  ...(def.cell ? { cell: def.cell } : {}),
-}));
-
-export default function RegionTableWithSearch({ initialRegions }: Props) {
-  const [regions, setRegions] = useState(initialRegions);
+export default function RegionTableWithSearch({ initialData }: Props) {
+  const [regions, setRegions] = useState(initialData);
 
   return (
     <SearchTableSection
-      fields={fields}
+      fields={regionColumnDefs.map(({ header, accessor }) => ({
+        key: accessor as string,
+        label: header,
+      }))}
       setDataAction={setRegions}
       apiPath="region"
       data={regions}
-      columns={columns}
+      columns={regionColumnDefs}
       emptyMessage="데이터가 없습니다."
     />
   );

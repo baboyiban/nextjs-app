@@ -26,7 +26,6 @@ export function useAuth() {
       });
       if (response.ok) {
         const userData = await response.json();
-        console.log("user:", userData);
         setUser(userData);
       } else {
         setUser(null);

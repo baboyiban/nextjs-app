@@ -1,0 +1,17 @@
+services:
+  nextjs-app:
+    image: chl11wq12/kosta-2-nextjs-app:v1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextjs-app
+    ports:
+      - "$PORT:${PORT}"
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT}
+      - API_URL=${API_URL}
+      - BASE_URL=${BASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+    restart: unless-stopped

@@ -2,76 +2,65 @@
 
 import { useState } from "react";
 import { z } from "zod";
-import { TripLogSchema, TripLog } from "@/app/types/database/trip-log";
+import { VehicleSchema, Vehicle } from "@/app/types/database/vehicle";
 import { StatusBadge } from "@/app/components/ui/status-badge";
 import SearchTableSection from "@/app/components/data/search-table-section";
 import { Column } from "@/app/components/data/data-table";
-import { formatDateTimeISO } from "@/app/utils/format";
-
-type TripLogColumnDef = {
-  key: keyof TripLog;
-  label: string;
-  cell?: (item: TripLog) => React.ReactNode;
-};
 
 type Props = {
-  initialTripLogs: z.infer<typeof TripLogSchema>[];
+  initialData: z.infer<typeof VehicleSchema>[];
 };
 
-const tripLogColumnDefs: TripLogColumnDef[] = [
-  { key: "trip_id", label: "운행 ID" },
-  { key: "vehicle_id", label: "차량 ID" },
+const vehicleColumnDefs: Column<Vehicle>[] = [
+  { header: "내부 ID", accessor: "internal_id" },
+  { header: "차량 ID", accessor: "vehicle_id" },
+  { header: "현재 적재량", accessor: "current_load" },
+  { header: "최대 적재량", accessor: "max_load" },
   {
-    key: "start_time",
-    label: "시작 시각",
-    cell: (item) =>
-      item.start_time ? (
-        formatDateTimeISO(item.start_time as any)
-      ) : (
-        <StatusBadge status="N/A" variant="neutral" />
-      ),
-  },
-  {
-    key: "end_time",
-    label: "종료 시각",
-    cell: (item) =>
-      item.end_time ? (
-        formatDateTimeISO(item.end_time as any)
-      ) : (
-        <StatusBadge status="N/A" variant="neutral" />
-      ),
-  },
-  {
-    key: "status",
-    label: "상태",
+    header: "LED 상태",
+    accessor: "led_status",
     cell: (item) => (
       <StatusBadge
-        status={item.status}
-        variant={item.status === "운송중" ? "success" : "neutral"}
+        status={item.led_status || "N/A"}
+        variant={
+          item.led_status === "빨강"
+            ? "danger"
+            : item.led_status === "노랑"
+              ? "warning"
+              : item.led_status === "초록"
+                ? "success"
+                : "neutral"
+        }
       />
     ),
   },
-  { key: "destination", label: "목적지" },
+  {
+    header: "확인 필요",
+    accessor: "needs_confirmation",
+    cell: (item) => (
+      <StatusBadge
+        status={item.needs_confirmation ? "필요" : "불필요"}
+        variant={item.needs_confirmation ? "danger" : "success"}
+      />
+    ),
+  },
+  { header: "좌표 X", accessor: "coord_x" },
+  { header: "좌표 Y", accessor: "coord_y" },
 ];
 
-const fields = tripLogColumnDefs.map(({ key, label }) => ({ key, label }));
-
-const columns: Column<TripLog>[] = tripLogColumnDefs.map((def) => ({
-  header: def.label,
-  accessor: def.key,
-  ...(def.cell ? { cell: def.cell } : {}),
-}));
-
-export default function TripLogTableWithSearch({ initialTripLogs }: Props) {
-  const [tripLogs, setTripLogs] = useState(initialTripLogs);
+export default function VehicleTableWithSearch({ initialData }: Props) {
+  const [vehicles, setVehicles] = useState(initialData);
 
   return (
     <SearchTableSection
-      fields={fields}
-      setDataAction={setTripLogs}
-      apiPath="trip-log"
-      data={tripLogs}
-      columns={columns}
+      fields={vehicleColumnDefs.map(({ header, accessor }) => ({
+        key: accessor as string,
+        label: header,
+      }))}
+      setDataAction={setVehicles}
+      apiPath="vehicle"
+      data={vehicles}
+      columns={vehicleColumnDefs}
       emptyMessage="데이터가 없습니다."
     />
   );

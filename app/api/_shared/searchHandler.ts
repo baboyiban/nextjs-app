@@ -8,7 +8,7 @@ export async function searchHandler(request: NextRequest, backendPath: string) {
   }
 
   const url = new URL(request.url);
-  const backendUrl = `${process.env.API_BASE_URL}/api/${backendPath}/search?${url.searchParams.toString()}`;
+  const backendUrl = `${process.env.API_URL}/api/${backendPath}/search?${url.searchParams.toString()}`;
   const { data, status } = await fetchWithAuth(backendUrl, token);
   return Response.json(data, { status });
 }
