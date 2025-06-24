@@ -35,7 +35,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={handleLogout}
-          className="bg-red shadow-[0_0_1px_rgba(0,0,0,0.1)] hover:opacity-80 transition-opacity"
+          className="bg-red shadow-[0_0_1px_rgba(0,0,0,0.1)]"
         >
           로그아웃
         </button>
