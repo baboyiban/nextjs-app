@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../context/auth-context";
 import Navbar from "./navbar";
 import { Loading } from "./ui/loading";
 
@@ -11,7 +11,8 @@ interface ClientLayoutProps {
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const pathname = usePathname();
-  const { isAuthenticated, loading } = useAuth();
+  const { user, loading } = useAuth();
+  const isAuthenticated = !!user;
 
   // 로그인 페이지인지 확인
   const isLoginPage = pathname === "/login";

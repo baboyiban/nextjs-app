@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../context/auth-context"; // 변경된 부분
 import { Loading } from "../components/ui/loading";
 
 export default function LoginPage() {

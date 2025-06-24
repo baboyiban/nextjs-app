@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/app/hooks/use-auth";
+import { useAuth } from "@/app/context/auth-context";
 import VehicleAlert from "./vehicle-alert";
 
 export default function Navbar() {

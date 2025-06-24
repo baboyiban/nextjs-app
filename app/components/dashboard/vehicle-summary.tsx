@@ -42,8 +42,8 @@ export default function VehicleSummary({ vehicles }: VehicleSummaryProps) {
                       className={`w-3 h-3 rounded-full ${
                         vehicleData.led_status === "빨강"
                           ? "bg-dark-red"
-                          : vehicleData.led_status === "노랑"
-                            ? "bg-dark-yellow"
+                          : vehicleData.led_status === "하양"
+                            ? "bg-gray"
                             : vehicleData.led_status === "초록"
                               ? "bg-dark-green"
                               : "bg-dark-gray"

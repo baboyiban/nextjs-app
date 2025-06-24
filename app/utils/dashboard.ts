@@ -158,8 +158,8 @@ export const getPackageStatus = (
 // 차량 LED 상태에 따른 스타일 반환
 export const getVehicleLedStyle = (ledStatus?: string): string => {
   switch (ledStatus) {
-    case "노랑":
-      return "bg-yellow";
+    case "하양":
+      return "bg-gray";
     case "빨강":
       return "bg-red";
     case "초록":

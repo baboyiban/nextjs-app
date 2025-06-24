@@ -25,7 +25,7 @@ const vehicleColumnDefs: Column<Vehicle>[] = [
         variant={
           item.led_status === "빨강"
             ? "danger"
-            : item.led_status === "노랑"
+            : item.led_status === "하양"
               ? "warning"
               : item.led_status === "초록"
                 ? "success"

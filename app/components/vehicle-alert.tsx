@@ -3,16 +3,18 @@ import mqtt, { MqttClient } from "mqtt";
 
 type VehicleStatus = {
   internal_id: number;
-  vehicle_id?: string;
+  vehicle_id: string;
   led_status: string;
+  message: string; // 추가
 };
 
 export default function VehicleAlert() {
   const [emergencies, setEmergencies] = useState<VehicleStatus[]>([]);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const clientRef = useRef<MqttClient | null>(null);
 
   useEffect(() => {
-    const client = mqtt.connect("wss://mqtt.choidaruhan.xyz");
+    const client = mqtt.connect("ws://localhost:8083");
     clientRef.current = client;
 
     client.on("connect", () => {
@@ -29,7 +31,7 @@ export default function VehicleAlert() {
             );
             return [...filtered, data];
           }
-          if (data.led_status === "노랑" || data.led_status === "초록") {
+          if (data.led_status === "하양" || data.led_status === "초록") {
             return prev.filter((v) => v.internal_id !== data.internal_id);
           }
           return prev;
@@ -50,29 +52,37 @@ export default function VehicleAlert() {
         "vehicle/emergency/confirm",
         JSON.stringify({ internal_id }),
       );
+      setSuccessMsg("확인되었습니다!");
+      setEmergencies((prev) =>
+        prev.filter((v) => v.internal_id !== internal_id),
+      );
+      setTimeout(() => setSuccessMsg(null), 2000);
     }
   };
 
   return (
-    <div className="flex flex-col gap-[0.5rem]">
-      {emergencies.length > 0 ? (
-        emergencies.map((v) => (
+    (emergencies.length > 0 || successMsg) && (
+      <div className="absolute inset-0 flex flex-col gap-[0.5rem] bg-[rgba(0,0,0,0.5)] z-10 items-center justify-center">
+        {successMsg && (
+          <div className="mb-2 p-2 bg-green-600 text-white rounded">
+            {successMsg}
+          </div>
+        )}
+        {emergencies.map((v) => (
           <div
             key={v.internal_id}
-            className="p-[0.5rem] rounded-lg bg-white flex justify-between items-center"
+            className="w-fit bg-red p-[0.5rem] rounded-lg flex justify-between items-center gap-[0.5rem]"
           >
-            {v.vehicle_id ? `${v.vehicle_id} ` : ""}
+            {v.message}
             <button
               onClick={() => handleConfirm(v.internal_id)}
               className="text-white p-[0.5rem] rounded-lg bg-dark-red animate-pulse"
             >
-              🚨 긴급 호출
+              🚨 확인
             </button>
           </div>
-        ))
-      ) : (
-        <div className="flex flex-col gap-[0.5rem]"></div>
-      )}
-    </div>
+        ))}
+      </div>
+    )
   );
 }
