@@ -14,7 +14,7 @@ export default function VehicleAlert() {
   const clientRef = useRef<MqttClient | null>(null);
 
   useEffect(() => {
-    const client = mqtt.connect(`ws://${process.env.NEXT_PUBLIC_MQTT_DOMAIN}`);
+    const client = mqtt.connect(`wss://mqtt.choidaruhan.xyz`);
     clientRef.current = client;
 
     client.on("connect", () => {
