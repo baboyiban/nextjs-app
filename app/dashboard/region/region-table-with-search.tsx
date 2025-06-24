@@ -6,6 +6,7 @@ import { RegionSchema, Region } from "@/app/types/database/region";
 import { StatusBadge } from "@/app/components/ui/status-badge";
 import SearchTableSection from "@/app/components/data/search-table-section";
 import { Column } from "@/app/components/data/data-table";
+import { formatDateTimeISO } from "@/app/utils/format";
 
 type Props = {
   initialData: z.infer<typeof RegionSchema>[];
@@ -33,7 +34,7 @@ const regionColumnDefs: Column<Region>[] = [
     accessor: "saturated_at",
     cell: (item) =>
       item.saturated_at ? (
-        new Date(item.saturated_at).toLocaleString()
+        formatDateTimeISO(item.saturated_at)
       ) : (
         <StatusBadge status="N/A" variant="neutral" />
       ),

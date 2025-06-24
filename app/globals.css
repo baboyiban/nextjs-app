@@ -34,3 +34,7 @@ button {
 input {
     outline: none;
 }
+
+select {
+    outline: none;
+}
