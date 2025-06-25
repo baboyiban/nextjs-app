@@ -13,7 +13,7 @@ export default function VehicleAlert() {
 
   useEffect(() => {
     // 개발 환경에서는 ws, 운영 환경에서는 wss를 사용해야 합니다.
-    const client = mqtt.connect(`wss://mqtt.choidaruhan.xyz:8083/mqtt`);
+    const client = mqtt.connect(`wss://mqtt.choidaruhan.xyz/mqtt`);
     clientRef.current = client;
 
     client.on("connect", () => {
