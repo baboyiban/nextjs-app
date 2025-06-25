@@ -3,9 +3,7 @@ import mqtt, { MqttClient } from "mqtt";
 
 type VehicleStatus = {
   internal_id: number;
-  vehicle_id: string;
-  led_status: string;
-  message: string; // 추가
+  message: string;
 };
 
 export default function VehicleAlert() {
@@ -14,7 +12,8 @@ export default function VehicleAlert() {
   const clientRef = useRef<MqttClient | null>(null);
 
   useEffect(() => {
-    const client = mqtt.connect(`wss://mqtt.choidaruhan.xyz`);
+    // 개발 환경에서는 ws, 운영 환경에서는 wss를 사용해야 합니다.
+    const client = mqtt.connect(`ws://mqtt.choidaruhan.xyz:8083/mqtt`);
     clientRef.current = client;
 
     client.on("connect", () => {
@@ -25,16 +24,11 @@ export default function VehicleAlert() {
       try {
         const data = JSON.parse(message.toString()) as VehicleStatus;
         setEmergencies((prev) => {
-          if (data.led_status === "빨강") {
-            const filtered = prev.filter(
-              (v) => v.internal_id !== data.internal_id,
-            );
-            return [...filtered, data];
-          }
-          if (data.led_status === "하양" || data.led_status === "초록") {
-            return prev.filter((v) => v.internal_id !== data.internal_id);
-          }
-          return prev;
+          // 동일한 internal_id를 가진 기존 알림을 필터링하고 새 알림을 추가/업데이트합니다.
+          const filtered = prev.filter(
+            (v) => v.internal_id !== data.internal_id,
+          );
+          return [...filtered, data];
         });
       } catch {
         // 파싱 실패 시 무시
