@@ -40,8 +40,8 @@ const tripLogColumnDefs: Column<TripLog>[] = [
     accessor: "status",
     cell: (item) => (
       <StatusBadge
-        status={item.status === "운송중" ? "운송중" : "비운송중"}
-        variant={item.status === "운송중" ? "process" : "neutral"}
+        status={item.status}
+        variant={item.status === "운행중" ? "process" : "neutral"}
       />
     ),
   },

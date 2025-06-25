@@ -7,11 +7,11 @@ function transformRawTripLog(raw: any): TripLog {
     vehicle_id: raw.vehicle_id,
     start_time: raw.start_time ? new Date(raw.start_time) : undefined,
     end_time: raw.end_time ? new Date(raw.end_time) : undefined,
-    status: raw.status === "운행중" ? "운송중" : raw.status,
+    status: raw.status,
     destination:
       raw.destination === null || raw.destination === ""
         ? undefined
-        : raw.destination, // 추가
+        : raw.destination,
   };
 }
 

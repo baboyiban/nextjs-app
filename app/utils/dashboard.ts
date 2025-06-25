@@ -148,7 +148,9 @@ export const getPackageStatus = (
       return "process";
     case "A차운송중":
       return "warning";
-    case "배송완료":
+    case "B차운송중":
+      return "warning";
+    case "완료됨":
       return "success";
     default:
       return "neutral";
