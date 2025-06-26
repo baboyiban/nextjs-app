@@ -58,9 +58,7 @@ export default function VehicleAlert() {
     (emergencies.length > 0 || successMsg) && (
       <div className="absolute inset-0 flex flex-col gap-[0.5rem] bg-[rgba(0,0,0,0.5)] z-10 items-center justify-center">
         {successMsg && (
-          <div className="mb-2 p-2 bg-green-600 text-white rounded">
-            {successMsg}
-          </div>
+          <div className="mb-2 p-2 bg-green rounded">{successMsg}</div>
         )}
         {emergencies.map((v) => (
           <div
