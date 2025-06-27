@@ -5,16 +5,24 @@ import { useAuth } from "@/app/context/auth-context";
 import VehicleAlert from "./vehicle-alert";
 import { useDashboardData } from "../context/dashboard-data-context";
 import { NAV_LINKS } from "../../navLinks"; // 실제 위치에 맞게 경로 조정
+import Modal from "./common/modal"; // 추가
+
+import { useState } from "react"; // 추가
 
 export default function Navbar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { hasEmergency } = useDashboardData();
 
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false); // 추가
+
   const handleLogout = () => {
-    if (confirm("로그아웃하시겠습니까?")) {
-      logout();
-    }
+    setLogoutModalOpen(true); // 모달 열기
+  };
+
+  const confirmLogout = () => {
+    setLogoutModalOpen(false);
+    logout();
   };
 
   const filteredLinks = NAV_LINKS.filter(
@@ -78,6 +86,31 @@ export default function Navbar() {
       )}
       {/* 🚨 빨강 LED 알림 */}
       <VehicleAlert />
+
+      {/* 로그아웃 모달 */}
+      <Modal
+        className="bg-white"
+        open={logoutModalOpen}
+        onClose={() => setLogoutModalOpen(false)}
+      >
+        <div className="flex flex-col items-center gap-[0.5rem]">
+          <div>로그아웃하시겠습니까?</div>
+          <div className="flex gap-[0.5rem]">
+            <button
+              className="p-[0.5rem] rounded-lg bg-red"
+              onClick={confirmLogout}
+            >
+              확인
+            </button>
+            <button
+              className="p-[0.5rem] rounded-lg bg-deep-gray"
+              onClick={() => setLogoutModalOpen(false)}
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      </Modal>
     </nav>
   );
 }
