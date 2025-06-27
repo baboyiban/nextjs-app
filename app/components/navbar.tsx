@@ -15,6 +15,7 @@ export default function Navbar() {
     { name: "택배", href: "/dashboard/package" },
     { name: "운행 기록", href: "/dashboard/trip-log" },
     { name: "운행 택배", href: "/dashboard/delivery-log" },
+    { name: "비상 호출", href: "/dashboard/emergency-log" },
     { name: "직원", href: "/dashboard/employee" },
   ];
 
