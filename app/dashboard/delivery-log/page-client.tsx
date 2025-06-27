@@ -1,8 +1,8 @@
 "use client";
 
-import { deliveryLogColumnDefs } from "./columns";
-import DataPage from "../common/data-page";
+import DataPage from "@/app/components/common/data-page";
 import { DeliveryLog } from "@/app/types/database/delivery-log";
+import { deliveryLogColumnDefs } from "./columns";
 
 type Props = {
   initialData: DeliveryLog[];
@@ -14,7 +14,6 @@ export default function DeliveryLogPageClient({ initialData }: Props) {
       initialData={initialData}
       columns={deliveryLogColumnDefs}
       apiPath="delivery-log"
-      emptyMessage="데이터가 없습니다."
     />
   );
 }

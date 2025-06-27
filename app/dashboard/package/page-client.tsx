@@ -1,8 +1,8 @@
 "use client";
 
-import DataPage from "../common/data-page";
 import { Package } from "@/app/types/database/package";
 import { packageColumnDefs } from "./columns";
+import DataPage from "@/app/components/common/data-page";
 
 type Props = {
   initialData: Package[];
@@ -14,7 +14,6 @@ export default function PackagePageClient({ initialData }: Props) {
       initialData={initialData}
       columns={packageColumnDefs}
       apiPath="package"
-      emptyMessage="데이터가 없습니다."
     />
   );
 }

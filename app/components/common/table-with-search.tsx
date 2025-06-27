@@ -15,7 +15,6 @@ export default function TableWithSearch<T>({
   initialData,
   columns,
   apiPath,
-  emptyMessage = "데이터가 없습니다.",
 }: TableWithSearchProps<T>) {
   const [data, setData] = useState(initialData);
 
@@ -29,7 +28,6 @@ export default function TableWithSearch<T>({
       apiPath={apiPath}
       data={data}
       columns={columns}
-      emptyMessage={emptyMessage}
     />
   );
 }

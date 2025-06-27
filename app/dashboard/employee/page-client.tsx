@@ -1,8 +1,8 @@
 "use client";
 
-import { employeeColumnDefs } from "./columns";
-import DataPage from "../common/data-page";
+import DataPage from "@/app/components/common/data-page";
 import { Employee } from "@/app/types/database/employee";
+import { employeeColumnDefs } from "./columns";
 
 type Props = {
   initialData: Employee[];
@@ -14,7 +14,6 @@ export default function EmployeePageClient({ initialData }: Props) {
       initialData={initialData}
       columns={employeeColumnDefs}
       apiPath="employee"
-      emptyMessage="데이터가 없습니다."
     />
   );
 }

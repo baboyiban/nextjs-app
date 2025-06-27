@@ -1,8 +1,8 @@
 "use client";
 
-import { vehicleColumnDefs } from "./columns";
-import DataPage from "../common/data-page";
+import DataPage from "@/app/components/common/data-page";
 import { Vehicle } from "@/app/types/database/vehicle";
+import { vehicleColumnDefs } from "./columns";
 
 type Props = {
   initialData: Vehicle[];
@@ -14,7 +14,6 @@ export default function VehiclePageClient({ initialData }: Props) {
       initialData={initialData}
       columns={vehicleColumnDefs}
       apiPath="vehicle"
-      emptyMessage="데이터가 없습니다."
     />
   );
 }

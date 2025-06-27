@@ -18,7 +18,6 @@ export default function SearchTableSection<T>({
   apiPath,
   data,
   columns,
-  emptyMessage = "데이터가 없습니다.",
 }: SearchTableSectionProps<T>) {
   return (
     <div className="flex flex-col gap-[0.5rem]">
@@ -27,7 +26,7 @@ export default function SearchTableSection<T>({
         setDataAction={setDataAction}
         apiPath={apiPath}
       />
-      <DataTable data={data} columns={columns} emptyMessage={emptyMessage} />
+      <DataTable data={data} columns={columns} />
     </div>
   );
 }
