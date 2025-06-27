@@ -19,7 +19,7 @@ export default function DashboardPage() {
       {/* 오전 11:48:16 */}
       <div className="flex justify-center items-center bg-white rounded-lg p-[0.25rem]">
         <div className="flex items-center gap-[0.5rem]">
-          <div className="w-[0.5rem] h-[0.5rem] bg-dark-green rounded-full animate-pulse"></div>
+          <div className="size-[0.5rem] bg-dark-green rounded-full animate-pulse"></div>
           <span className="text-sm text-dark-gray">
             {lastUpdated ? `${lastUpdated.toLocaleTimeString()}` : ""}
           </span>

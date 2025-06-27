@@ -49,7 +49,7 @@ export default function EmergencyConfirmPage() {
 
   useEffect(() => {
     fetchEmergencies();
-    const interval = setInterval(fetchEmergencies, 5000); // 5초마다 polling
+    const interval = setInterval(fetchEmergencies, 10000); // 10초 마다 polling
     return () => clearInterval(interval);
   }, []);
 
