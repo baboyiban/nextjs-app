@@ -1,15 +1,9 @@
 import { fetchTripLog } from "@/app/lib/fetch-trip-log";
-import TripLogTableWithSearch from "./trip-log-table-with-search";
-import DataPage from "../data-page";
+import TripLogPageClient from "./page-client";
 
 export const dynamic = "force-dynamic";
 
-export default function TripLogPage() {
-  return (
-    <DataPage
-      fetcher={fetchTripLog}
-      Component={TripLogTableWithSearch}
-      componentProps={{}}
-    />
-  );
+export default async function TripLogPage() {
+  const initialData = await fetchTripLog();
+  return <TripLogPageClient initialData={initialData} />;
 }

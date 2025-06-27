@@ -1,15 +1,9 @@
 import { fetchPackage } from "@/app/lib/fetch-package";
-import PackageTableWithSearch from "./package-table-with-search";
-import DataPage from "../data-page";
+import PackagePageClient from "./page-client";
 
 export const dynamic = "force-dynamic";
 
-export default function PackagePage() {
-  return (
-    <DataPage
-      fetcher={fetchPackage}
-      Component={PackageTableWithSearch}
-      componentProps={{}}
-    />
-  );
+export default async function PackagePage() {
+  const initialData = await fetchPackage();
+  return <PackagePageClient initialData={initialData} />;
 }

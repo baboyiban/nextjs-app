@@ -1,15 +1,9 @@
 import { fetchDeliveryLog } from "@/app/lib/fetch-delivery-log";
-import DeliveryLogTableWithSearch from "./delivery-log-table-with-search";
-import DataPage from "../data-page";
+import DeliveryLogPageClient from "./page-client";
 
 export const dynamic = "force-dynamic";
 
-export default function DeliveryLogPage() {
-  return (
-    <DataPage
-      fetcher={fetchDeliveryLog}
-      Component={DeliveryLogTableWithSearch}
-      componentProps={{}}
-    />
-  );
+export default async function DeliveryLogPage() {
+  const initialData = await fetchDeliveryLog();
+  return <DeliveryLogPageClient initialData={initialData} />;
 }

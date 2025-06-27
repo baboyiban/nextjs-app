@@ -1,15 +1,9 @@
 import { fetchEmployee } from "@/app/lib/fetch-employee";
-import DataPage from "../data-page";
-import EmployeeTableWithSearch from "./employee-table-with-search";
+import EmployeePageClient from "./page-client";
 
 export const dynamic = "force-dynamic";
 
-export default function EmployeePage() {
-  return (
-    <DataPage
-      fetcher={fetchEmployee}
-      Component={EmployeeTableWithSearch}
-      componentProps={{}}
-    />
-  );
+export default async function EmployeePage() {
+  const initialData = await fetchEmployee();
+  return <EmployeePageClient initialData={initialData} />;
 }

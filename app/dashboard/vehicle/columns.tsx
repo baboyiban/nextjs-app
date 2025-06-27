@@ -1,17 +1,8 @@
-"use client";
-
-import { useState } from "react";
-import { z } from "zod";
-import { VehicleSchema, Vehicle } from "@/app/types/database/vehicle";
-import { StatusBadge } from "@/app/components/ui/status-badge";
-import SearchTableSection from "@/app/components/search/search-table-section";
 import { Column } from "@/app/components/data/data-table";
+import { Vehicle } from "@/app/types/database/vehicle";
+import { StatusBadge } from "@/app/components/ui/status-badge";
 
-type Props = {
-  initialData: z.infer<typeof VehicleSchema>[];
-};
-
-const vehicleColumnDefs: Column<Vehicle>[] = [
+export const vehicleColumnDefs: Column<Vehicle>[] = [
   { header: "내부 ID", accessor: "internal_id" },
   { header: "차량 ID", accessor: "vehicle_id" },
   { header: "현재 적재량", accessor: "current_load" },
@@ -46,24 +37,6 @@ const vehicleColumnDefs: Column<Vehicle>[] = [
   },
   { header: "좌표 X", accessor: "coord_x" },
   { header: "좌표 Y", accessor: "coord_y" },
-  { header: "AI 좌표 X", accessor: "AI_coord_x" }, // 추가
-  { header: "AI 좌표 Y", accessor: "AI_coord_y" }, // 추가
+  { header: "AI 좌표 X", accessor: "AI_coord_x" },
+  { header: "AI 좌표 Y", accessor: "AI_coord_y" },
 ];
-
-export default function VehicleTableWithSearch({ initialData }: Props) {
-  const [vehicles, setVehicles] = useState(initialData);
-
-  return (
-    <SearchTableSection
-      fields={vehicleColumnDefs.map(({ header, accessor }) => ({
-        key: accessor as string,
-        label: header,
-      }))}
-      setDataAction={setVehicles}
-      apiPath="vehicle"
-      data={vehicles}
-      columns={vehicleColumnDefs}
-      emptyMessage="데이터가 없습니다."
-    />
-  );
-}
