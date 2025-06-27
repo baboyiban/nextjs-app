@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { NAV_LINKS } from "./navLinks";
 
 const PUBLIC_PATHS = ["/login", "/unauthorized"];
 const JWT_SECRET = process.env.JWT_SECRET as string;
@@ -18,22 +19,21 @@ async function getUserFromToken(token: string) {
   }
 }
 
+// 경로에 맞는 role 목록 반환
+function getRolesForPath(pathname: string): string[] {
+  // 가장 긴 prefix가 일치하는 navLink를 찾음
+  const matched = NAV_LINKS.filter(
+    (nav) => pathname === nav.link || pathname.startsWith(nav.link + "/"),
+  ).sort((a, b) => b.link.length - a.link.length)[0];
+  if (!matched) return [];
+  return matched.role.split("|");
+}
+
 // 권한 확인 함수
 function hasAccess(user: any, pathname: string): boolean {
-  if (user.position === "관리직") {
-    return true; // 관리직은 모든 경로 접근 가능
-  }
-
-  if (user.position === "운송직") {
-    // 운송직은 특정 경로만 접근 가능
-    return (
-      pathname.startsWith("/dashboard/package") ||
-      pathname.startsWith("/dashboard/trip-log") ||
-      pathname.startsWith("/dashboard/delivery-log")
-    );
-  }
-
-  return false; // 기타 권한은 모두 차단
+  const roles = getRolesForPath(pathname);
+  if (roles.length === 0) return false; // 매칭되는 경로가 없으면 접근 불가
+  return roles.includes(user.position);
 }
 
 export async function middleware(request: NextRequest) {
