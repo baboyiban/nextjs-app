@@ -4,7 +4,6 @@ import React from "react";
 import GridCell from "./grid-cell";
 import { Package } from "@/app/types/database/package";
 import { Vehicle } from "@/app/types/database/vehicle";
-import { Region } from "@/app/types/database/region";
 
 // 1. 차량별 맵 크기
 const VEHICLE_MAP_CONFIG = {
@@ -22,8 +21,69 @@ function getMapSizeForVehicle(vehicleId: string) {
 }
 
 // 2. 실제 공간 좌표 Set (존재하는 셀만)
-const SPACES_A1000 = new Set(["0,0", "0,1", "2,3", "2,7", "6,3", "6,7"]);
-const SPACES_B1001 = new Set(["3,1", "2,7", "0,0", "6,7"]);
+const SPACES_A1000 = new Set([
+  "0,0",
+  "1,0",
+  "2,0",
+  "3,0",
+  "4,0",
+  "5,0",
+  "6,0",
+  "7,0",
+  "8,0",
+  "0,1",
+  "4,1",
+  "8,1",
+  "0,2",
+  "2,2",
+  "4,2",
+  "6,2",
+  "8,2",
+  "0,3",
+  "1,3",
+  "2,3",
+  "3,3",
+  "4,3",
+  "5,3",
+  "6,3",
+  "7,3",
+  "8,3",
+  "0,4",
+  "4,4",
+  "8,4",
+  "0,5",
+  "2,5",
+  "4,5",
+  "6,5",
+  "8,5",
+  "0,6",
+  "1,6",
+  "2,6",
+  "3,6",
+  "4,6",
+  "5,6",
+  "6,6",
+  "7,6",
+  "8,6",
+]);
+const SPACES_B1001 = new Set([
+  "0,0",
+  "1,0",
+  "1,1",
+  "2,1",
+  "3,1",
+  "1,2",
+  "2,2",
+  "4,2",
+  "5,2",
+  "0,3",
+  "1,3",
+  "2,3",
+  "3,3",
+  "4,3",
+  "4,4",
+]);
+
 function getSpacesSet(vehicleId: string) {
   switch (vehicleId) {
     case "A-1000":
@@ -35,123 +95,39 @@ function getSpacesSet(vehicleId: string) {
   }
 }
 
-// 3. 지역 정보 Map (좌표 → Region)
-const REGIONS_A1000 = new Map<string, Region>([
-  [
-    "2,3",
-    {
-      region_id: "S",
-      region_name: "서울",
-      coord_x: 2,
-      coord_y: 3,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-  [
-    "2,7",
-    {
-      region_id: "K",
-      region_name: "경기",
-      coord_x: 2,
-      coord_y: 7,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-  [
-    "6,3",
-    {
-      region_id: "G",
-      region_name: "경북",
-      coord_x: 6,
-      coord_y: 3,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-  [
-    "6,7",
-    {
-      region_id: "W",
-      region_name: "강원",
-      coord_x: 6,
-      coord_y: 7,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-]);
-const REGIONS_B1001 = new Map<string, Region>([
-  [
-    "3,1",
-    {
-      region_id: "S",
-      region_name: "서울",
-      coord_x: 3,
-      coord_y: 1,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-  [
-    "2,7",
-    {
-      region_id: "K",
-      region_name: "경기",
-      coord_x: 2,
-      coord_y: 7,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-  [
-    "0,0",
-    {
-      region_id: "G",
-      region_name: "경북",
-      coord_x: 0,
-      coord_y: 0,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-  [
-    "6,7",
-    {
-      region_id: "W",
-      region_name: "강원",
-      coord_x: 6,
-      coord_y: 7,
-      max_capacity: 10,
-      current_capacity: 0,
-      is_full: false,
-      saturated_at: null,
-    },
-  ],
-]);
-function getRegionsMap(vehicleId: string) {
+// 3. 지역 좌표 Set 및 지역명 Record
+const REGION_SPACES_A1000 = new Set(["2,2", "2,7", "2,5", "6,5"]);
+const REGION_NAMES_A1000: Record<string, string> = {
+  "2,2": "서울",
+  "2,5": "경기",
+  "6,2": "경북",
+  "6,5": "강원",
+};
+const REGION_SPACES_B1001 = new Set(["0,0", "3,1", "5,2", "4,4"]);
+const REGION_NAMES_B1001: Record<string, string> = {
+  "3,1": "서울",
+  "5,2": "경기",
+  "0,0": "경북",
+  "4,4": "강원",
+};
+function getRegionSpaces(vehicleId: string) {
   switch (vehicleId) {
     case "A-1000":
-      return REGIONS_A1000;
+      return REGION_SPACES_A1000;
     case "B-1001":
-      return REGIONS_B1001;
+      return REGION_SPACES_B1001;
     default:
-      return new Map<string, Region>();
+      return new Set<string>();
+  }
+}
+function getRegionNames(vehicleId: string) {
+  switch (vehicleId) {
+    case "A-1000":
+      return REGION_NAMES_A1000;
+    case "B-1001":
+      return REGION_NAMES_B1001;
+    default:
+      return {};
   }
 }
 
@@ -163,7 +139,6 @@ interface GridMapProps {
 function SingleMap({
   vehicleId,
   vehicles,
-  packages,
 }: {
   vehicleId: string;
   vehicles: Vehicle[];
@@ -171,29 +146,29 @@ function SingleMap({
 }) {
   const mapSize = getMapSizeForVehicle(vehicleId);
   const spacesSet = getSpacesSet(vehicleId);
-  const regionsMap = getRegionsMap(vehicleId);
+  const regionSpaces = getRegionSpaces(vehicleId);
+  const regionNames = getRegionNames(vehicleId);
 
   const rows = [];
   for (let y = 0; y < mapSize.height; y++) {
     const cells = [];
     for (let x = 0; x < mapSize.width; x++) {
       const key = `${x},${y}`;
-      const isSpace = spacesSet.has(key);
-      const region = regionsMap.get(key);
+      const isRegion = regionSpaces.has(key);
+      const regionName = regionNames[key];
+      const isSpace = spacesSet.has(key) || isRegion;
       const vehiclesHere = vehicles.filter(
         (v) => v.coord_x === x && v.coord_y === y,
       );
-      const packagesHere = region
-        ? packages.filter((p) => p.region_id === region.region_id)
-        : [];
+      // 패키지 필터는 필요하다면 regionName 기준으로
       cells.push(
         <GridCell
           key={key}
           col={x}
           row={y}
-          region={region}
+          regionName={regionName}
           vehicles={vehiclesHere}
-          packages={packagesHere}
+          packages={[]} // 필요하다면 패키지 필터
           isSpace={isSpace}
         />,
       );
@@ -207,7 +182,6 @@ function SingleMap({
 
   return (
     <div className="flex flex-col items-center gap-[0.5rem]">
-      <div className="">{vehicleId}</div>
       <div>{rows}</div>
     </div>
   );
@@ -217,8 +191,8 @@ export default function GridMap({ vehicles, packages }: GridMapProps) {
   const vehicleIds = Object.keys(VEHICLE_MAP_CONFIG);
 
   return (
-    <div className="flex flex-col bg-white rounded-lg w-fit overflow-y-auto p-[1rem] pb-[2rem]">
-      <div className="flex gap-[2rem] justify-center flex-wrap">
+    <div className="flex flex-col rounded-lg w-fit overflow-y-auto">
+      <div className="flex gap-[0.5rem] justify-center flex-wrap *:bg-white *:p-[1rem] *:rounded-lg *:w-full *:overflow-x-auto">
         {vehicleIds.map((vehicleId) => (
           <SingleMap
             key={vehicleId}

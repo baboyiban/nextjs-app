@@ -3,12 +3,11 @@
 import React from "react";
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Package } from "@/app/types/database/package";
-import { Region } from "@/app/types/database/region";
 
 interface GridCellProps {
   col: number;
   row: number;
-  region?: Region;
+  regionName?: string;
   vehicles: Vehicle[];
   packages: Package[];
   isSpace: boolean;
@@ -17,31 +16,30 @@ interface GridCellProps {
 export default function GridCell({
   col,
   row,
-  region,
+  regionName,
   vehicles,
   packages,
   isSpace,
 }: GridCellProps) {
   if (!isSpace) {
-    // 진짜 빈 공간
     return <div className="size-[4rem] bg-transparent"></div>;
   }
 
   return (
     <div
       className={`
-        relative flex flex-col items-center justify-center size-16 border-[0.5px] border-deep-gray outline-[0.5px] outline-dark-gray
-        ${
-          region
-            ? "bg-blue hover:bg-purple transition-colors duration-[200ms]"
-            : "hover:bg-gray transition-colors duration-[200ms]"
-        }
-      `}
+            relative flex flex-col items-center justify-center size-16 border-[0.5px] border-deep-gray outline-[0.5px] outline-dark-gray
+            ${
+              regionName
+                ? "bg-blue hover:bg-purple transition-colors duration-[200ms]"
+                : "hover:bg-gray transition-colors duration-[200ms]"
+            }
+          `}
     >
       {/* 지역명 */}
-      {region && (
+      {regionName && (
         <div className="absolute top-[0.1rem] left-[0.1rem] text-[0.75rem]">
-          {region.region_name}
+          {regionName}
         </div>
       )}
 
