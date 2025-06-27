@@ -4,32 +4,24 @@ type ModalProps = {
   open: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  className?: string;
 };
 
-export default function Modal({ open, onClose, children }: ModalProps) {
+export default function Modal({
+  open,
+  onClose,
+  children,
+  className,
+}: ModalProps) {
   if (!open) return null;
   return (
     <div
-      style={{
-        position: "fixed",
-        top: 0, left: 0, right: 0, bottom: 0,
-        background: "rgba(0,0,0,0.5)",
-        zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      className="fixed inset-0 bg-[rgba(0,0,0,0.5)] z-10 flex items-center justify-center p-[0.5rem]"
       onClick={onClose}
     >
       <div
-        style={{
-          background: "#fff",
-          padding: "2rem",
-          borderRadius: "8px",
-          minWidth: "300px",
-          zIndex: 1001,
-        }}
-        onClick={e => e.stopPropagation()}
+        className={`p-[0.5rem] rounded-lg z-20 ${className}`}
+        onClick={(e) => e.stopPropagation()}
       >
         {children}
       </div>

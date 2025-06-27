@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import mqtt, { MqttClient } from "mqtt";
+import Modal from "./common/modal"; // 모달 import
 
 type VehicleStatus = {
   vehicle_id: string;
@@ -19,6 +20,7 @@ export default function VehicleAlert() {
   const [selectedReasons, setSelectedReasons] = useState<{
     [key: string]: number;
   }>({});
+  const [currentIdx, setCurrentIdx] = useState(0); // 현재 모달에 띄울 인덱스
   const clientRef = useRef<MqttClient | null>(null);
 
   useEffect(() => {
@@ -68,6 +70,7 @@ export default function VehicleAlert() {
       setSuccessMsg("확인되었습니다!");
       setEmergencies((prev) => prev.filter((v) => v.vehicle_id !== vehicle_id));
       setTimeout(() => setSuccessMsg(null), 2000);
+      setCurrentIdx(0); // 다음 경고로 이동
     }
   };
 
@@ -78,22 +81,29 @@ export default function VehicleAlert() {
     }));
   };
 
+  // 현재 보여줄 경고
+  const currentEmergency = emergencies[currentIdx];
+
   return (
-    (emergencies.length > 0 || successMsg) && (
-      <div className="absolute inset-0 flex flex-col gap-[0.5rem] bg-[rgba(0,0,0,0.5)] z-10 items-center justify-center p-[0.5rem]">
-        {successMsg && (
-          <div className="p-[0.5rem] bg-green rounded-lg">{successMsg}</div>
-        )}
-        {emergencies.map((v) => (
-          <div
-            key={`${v.vehicle_id}-${v.message}`}
-            className="w-fit bg-red p-[0.5rem] rounded-lg flex flex-col justify-between items-center gap-[0.5rem]"
-          >
-            {v.message}
+    <>
+      <Modal
+        open={!!currentEmergency}
+        onClose={() => {
+          setEmergencies((prev) => prev.filter((_, idx) => idx !== currentIdx));
+          setCurrentIdx(0);
+        }}
+        className="bg-red flex flex-col gap-[0.5rem] items-center justify-center"
+      >
+        {currentEmergency && (
+          <>
+            <div className="">{currentEmergency.message}</div>
             <select
-              value={selectedReasons[v.vehicle_id] || 1}
+              value={selectedReasons[currentEmergency.vehicle_id] || 1}
               onChange={(e) =>
-                handleReasonChange(v.vehicle_id, parseInt(e.target.value))
+                handleReasonChange(
+                  currentEmergency.vehicle_id,
+                  parseInt(e.target.value),
+                )
               }
               className="p-[0.5rem] rounded-lg bg-white text-black appearance-none"
             >
@@ -102,14 +112,21 @@ export default function VehicleAlert() {
               <option value={3}>운송 관련 호출</option>
             </select>
             <button
-              onClick={() => handleConfirm(v.vehicle_id)}
+              onClick={() => handleConfirm(currentEmergency.vehicle_id)}
               className="text-white p-[0.5rem] rounded-lg bg-dark-red animate-pulse"
             >
               🚨 확인
             </button>
-          </div>
-        ))}
-      </div>
-    )
+          </>
+        )}
+      </Modal>
+      <Modal
+        open={!!successMsg}
+        onClose={() => setSuccessMsg(null)}
+        className="bg-green"
+      >
+        {successMsg}
+      </Modal>
+    </>
   );
 }

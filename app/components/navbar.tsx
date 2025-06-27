@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "전체 현황", href: "/dashboard" },
-    { name: "비상 호출 현황", href: "/dashboard/emergency-realtime" },
+    { name: "긴급 확인", href: "/dashboard/emergency-confirm" },
     { name: "지역", href: "/dashboard/region" },
     { name: "차량", href: "/dashboard/vehicle" },
     { name: "택배", href: "/dashboard/package" },
