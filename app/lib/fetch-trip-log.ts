@@ -1,5 +1,5 @@
 import { TripLog, TripLogSchema } from "../types/database/trip-log";
-import { getData } from "./get-data";
+import { getServerData } from "./server-data";
 
 function transformRawTripLog(raw: any): TripLog {
   return {
@@ -17,7 +17,7 @@ function transformRawTripLog(raw: any): TripLog {
 
 export async function fetchTripLog(url?: string): Promise<TripLog[]> {
   const apiUrl = `/api/trip-log${url ? `/${url}` : ""}`;
-  const rawData = await getData<any>(apiUrl);
+  const rawData = await getServerData<any>(apiUrl);
   const data = rawData.map(transformRawTripLog);
   return TripLogSchema.array().parse(data);
 }

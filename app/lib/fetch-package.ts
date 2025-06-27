@@ -1,5 +1,5 @@
 import { Package, PackageSchema } from "../types/database/package";
-import { getData } from "./get-data";
+import { getServerData } from "./server-data";
 
 function transformRawPackage(raw: any): Package {
   return {
@@ -13,7 +13,7 @@ function transformRawPackage(raw: any): Package {
 
 export async function fetchPackage(url?: string): Promise<Package[]> {
   const apiUrl = `/api/package${url ? `/${url}` : ""}`;
-  const rawData = await getData<any>(apiUrl);
+  const rawData = await getServerData<any>(apiUrl);
   const data = rawData.map(transformRawPackage);
   return PackageSchema.array().parse(data);
 }

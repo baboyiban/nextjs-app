@@ -1,5 +1,5 @@
 import { Region, RegionSchema } from "../types/database/region";
-import { getData } from "./get-data";
+import { getServerData } from "./server-data";
 
 function transformRawRegion(raw: any): Region {
   return {
@@ -16,7 +16,7 @@ function transformRawRegion(raw: any): Region {
 
 export async function fetchRegion(url?: string): Promise<Region[]> {
   const apiUrl = `/api/region${url ? `/${url}` : ""}`;
-  const rawData = await getData<any>(apiUrl);
+  const rawData = await getServerData<any>(apiUrl);
   const data = rawData.map(transformRawRegion);
   return RegionSchema.array().parse(data);
 }

@@ -1,5 +1,5 @@
 import { Vehicle, VehicleSchema } from "../types/database/vehicle";
-import { getData } from "./get-data";
+import { getServerData } from "./server-data";
 
 function transformRawVehicle(raw: any): Vehicle {
   return {
@@ -18,7 +18,7 @@ function transformRawVehicle(raw: any): Vehicle {
 
 export async function fetchVehicle(url?: string): Promise<Vehicle[]> {
   const apiUrl = `/api/vehicle${url ? `/${url}` : ""}`;
-  const rawData = await getData<any>(apiUrl);
+  const rawData = await getServerData<any>(apiUrl);
   const data = rawData.map(transformRawVehicle);
   return VehicleSchema.array().parse(data);
 }

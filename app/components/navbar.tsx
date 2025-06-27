@@ -3,33 +3,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/context/auth-context";
 import VehicleAlert from "./vehicle-alert";
-import { useEffect, useState } from "react";
+
+import { useDashboardData } from "../context/dashboard-data-context";
 
 export default function Navbar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-
-  // 긴급 확인 알림 상태
-  const [hasEmergency, setHasEmergency] = useState(false);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    const fetchEmergency = async () => {
-      try {
-        const res = await fetch("/api/emergency-log");
-        if (res.ok) {
-          const data = await res.json();
-          // needs_confirmation이 true(또는 1)인 항목이 있으면 알림 표시
-          setHasEmergency(data.some((e: any) => !!e.needs_confirmation));
-        }
-      } catch {
-        setHasEmergency(false);
-      }
-    };
-    fetchEmergency();
-    timer = setInterval(fetchEmergency, 10000); // 10초마다 polling
-    return () => clearInterval(timer);
-  }, []);
+  const { hasEmergency } = useDashboardData();
 
   const handleLogout = () => {
     if (confirm("로그아웃하시겠습니까?")) {
@@ -37,20 +17,54 @@ export default function Navbar() {
     }
   };
 
-  const navLinksMain = [
-    { name: "전체 현황", href: "/dashboard" },
-    { name: "긴급 확인", href: "/dashboard/emergency-confirm" },
+  const navLinks = [
+    { type: "main", name: "전체 현황", link: "/dashboard", role: "관리직" },
+    {
+      type: "main",
+      name: "긴급 확인",
+      link: "/dashboard/emergency-confirm",
+      role: "관리직",
+    },
+    { type: "sub", name: "지역", link: "/dashboard/region", role: "관리직" },
+    { type: "sub", name: "차량", link: "/dashboard/vehicle", role: "관리직" },
+    {
+      type: "sub",
+      name: "택배",
+      link: "/dashboard/package",
+      role: "관리직|운송직",
+    },
+    {
+      type: "sub",
+      name: "운행 기록",
+      link: "/dashboard/trip-log",
+      role: "관리직|운송직",
+    },
+    {
+      type: "sub",
+      name: "운행 택배",
+      link: "/dashboard/delivery-log",
+      role: "관리직|운송직",
+    },
+    {
+      type: "sub",
+      name: "비상 호출",
+      link: "/dashboard/emergency-log",
+      role: "관리직",
+    },
+    { type: "sub", name: "직원", link: "/dashboard/employee", role: "관리직" },
   ];
 
-  const navLinksSub = [
-    { name: "지역", href: "/dashboard/region" },
-    { name: "차량", href: "/dashboard/vehicle" },
-    { name: "택배", href: "/dashboard/package" },
-    { name: "운행 기록", href: "/dashboard/trip-log" },
-    { name: "운행 택배", href: "/dashboard/delivery-log" },
-    { name: "비상 호출", href: "/dashboard/emergency-log" },
-    { name: "직원", href: "/dashboard/employee" },
-  ];
+  const filteredLinks = navLinks.filter(
+    (link) =>
+      user &&
+      link.role
+        .split("|")
+        .map((r) => r.trim())
+        .includes(user.position),
+  );
+
+  const mainLinks = filteredLinks.filter((link) => link.type === "main");
+  const subLinks = filteredLinks.filter((link) => link.type === "sub");
 
   return (
     <nav className="min-w-[15rem] max-w-[15rem] flex flex-col gap-[0.5rem] min-h-[calc(100dvh-1rem)] max-h-[calc(100dvh-1rem)] overflow-x-hidden overflow-y-auto rounded-lg">
@@ -68,34 +82,37 @@ export default function Navbar() {
           로그아웃
         </button>
       </div>
-      {/* 메인 메뉴 */}
-      <div className="flex flex-col bg-white rounded-lg *:p-[0.5rem] *:text-center overflow-hidden *:not-last:border-b *:not-last:border-b-[var(--color-gray)] shadow-[inset_0_0_1px_rgba(0,0,0,0.1)] shrink-0">
-        {navLinksMain.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`relative${pathname === link.href ? " bg-blue" : ""}`}
-          >
-            {/* "긴급 확인"에만 빨간 점 표시 */}
-            {link.href === "/dashboard/emergency-confirm" && hasEmergency && (
-              <div className="absolute size-[0.5rem] left-[0.5rem] bottom-[calc(50%-0.25rem)] bg-dark-red rounded-full animate-pulse mr-[0.5rem]" />
-            )}
-            {link.name}
-          </Link>
-        ))}
-      </div>
+      {mainLinks.length > 0 && (
+        <div className="flex flex-col bg-white rounded-lg *:p-[0.5rem] *:text-center overflow-hidden *:not-last:border-b *:not-last:border-b-[var(--color-gray)] shadow-[inset_0_0_1px_rgba(0,0,0,0.1)] shrink-0">
+          {mainLinks.map((link) => (
+            <Link
+              key={link.link}
+              href={link.link}
+              className={`relative${pathname === link.link ? " bg-blue" : ""}`}
+            >
+              {link.name}
+              {/* "긴급 확인" 메뉴에만 빨간 점 표시 */}
+              {link.link === "/dashboard/emergency-confirm" && hasEmergency && (
+                <span className="absolute left-[0.5rem] bottom-[calc(50%-0.25rem)] size-[0.5rem] bg-red rounded-full animate-pulse"></span>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
       {/* 서브 메뉴 */}
-      <div className="flex flex-col bg-white rounded-lg *:p-[0.5rem] *:text-center overflow-hidden *:not-last:border-b *:not-last:border-b-[var(--color-gray)] shadow-[inset_0_0_1px_rgba(0,0,0,0.1)] shrink-0">
-        {navLinksSub.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`${pathname === link.href ? " bg-blue" : ""}`}
-          >
-            {link.name}
-          </Link>
-        ))}
-      </div>
+      {subLinks.length > 0 && (
+        <div className="flex flex-col bg-white rounded-lg *:p-[0.5rem] *:text-center overflow-hidden *:not-last:border-b *:not-last:border-b-[var(--color-gray)] shadow-[inset_0_0_1px_rgba(0,0,0,0.1)] shrink-0">
+          {subLinks.map((link) => (
+            <Link
+              key={link.link}
+              href={link.link}
+              className={`block${pathname === link.link ? " bg-blue" : ""}`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+      )}
       {/* 🚨 빨강 LED 알림 */}
       <VehicleAlert />
     </nav>

@@ -1,29 +1,20 @@
 import axios, { AxiosError } from "axios";
-import { cookies } from "next/headers";
 
 export async function getData<T>(
   url: string,
   validateStatus: (status: number) => boolean = (status) =>
     status >= 200 && status < 300,
+  cookieHeader?: string,
 ): Promise<T[]> {
   try {
-    // SSR에서 쿠키를 헤더에 넣어서 내부 API Route 호출
-    const cookieStore = await cookies();
-    const cookieHeader = cookieStore
-      .getAll()
-      .map((c) => `${c.name}=${c.value}`)
-      .join("; ");
+    const headers: Record<string, string> = {};
+    if (cookieHeader) headers.cookie = cookieHeader;
 
-    const response = await axios.get<T[]>(
-      `${process.env.FRONTEND_URL}/${url}`,
-      {
-        headers: {
-          cookie: cookieHeader,
-        },
-        validateStatus,
-        timeout: 5000,
-      },
-    );
+    const response = await axios.get<T[]>(`${process.env.FRONTEND_URL}${url}`, {
+      headers,
+      validateStatus,
+      timeout: 5000,
+    });
     return response.data || [];
   } catch (error) {
     const errorMessage =

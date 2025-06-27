@@ -1,5 +1,8 @@
-import { EmergencyLog, EmergencyLogSchema } from "../types/database/emergency-log";
-import { getData } from "./get-data";
+import {
+  EmergencyLog,
+  EmergencyLogSchema,
+} from "../types/database/emergency-log";
+import { getServerData } from "./server-data";
 
 function transformRawEmergencyLog(raw: any): EmergencyLog {
   return {
@@ -14,7 +17,7 @@ function transformRawEmergencyLog(raw: any): EmergencyLog {
 
 export async function fetchEmergencyLog(url?: string): Promise<EmergencyLog[]> {
   const apiUrl = `/api/emergency-log${url ? `/${url}` : ""}`;
-  const rawData = await getData<any>(apiUrl);
+  const rawData = await getServerData<any>(apiUrl);
   const data = rawData.map(transformRawEmergencyLog);
   return EmergencyLogSchema.array().parse(data);
 }

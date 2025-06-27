@@ -1,5 +1,5 @@
 import { DeliveryLog, DeliveryLogSchema } from "../types/database/delivery-log";
-import { getData } from "./get-data";
+import { getServerData } from "./server-data";
 
 function transformRawDeliveryLog(raw: any): DeliveryLog {
   function parseDate(val: any): Date | undefined {
@@ -28,7 +28,7 @@ function transformRawDeliveryLog(raw: any): DeliveryLog {
 
 export async function fetchDeliveryLog(url?: string): Promise<DeliveryLog[]> {
   const apiUrl = `/api/delivery-log${url ? `/${url}` : ""}`;
-  const rawData = await getData<any>(apiUrl);
+  const rawData = await getServerData<any>(apiUrl);
   const data = rawData.map(transformRawDeliveryLog);
   return DeliveryLogSchema.array().parse(data);
 }
