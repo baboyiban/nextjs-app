@@ -29,7 +29,7 @@ export default function DashboardPage() {
       <div className="flex gap-[0.5rem]">
         <div className="flex flex-col gap-[0.5rem]">
           <VehicleSummary vehicles={vehicles} />
-          <GridMap vehicles={vehicles} packages={packages} />
+          <GridMap vehicles={vehicles} />
         </div>
         <PackageList packages={packages} />
       </div>
