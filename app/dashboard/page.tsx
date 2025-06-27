@@ -1,7 +1,8 @@
+// frontend/app/dashboard/page.tsx
 "use client";
 
 import React from "react";
-import { useDashboardData } from "../hooks/use-dashboard-data";
+import { useDashboardData } from "../context/dashboard-data-context";
 import GridMap from "../components/dashboard/grid-map";
 import PackageList from "../components/dashboard/package-list";
 import { Loading } from "../components/ui/loading";
@@ -16,7 +17,6 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-[0.5rem] max-w-[calc(100svw-240px-24px)]">
-      {/* 오전 11:48:16 */}
       <div className="flex justify-center items-center bg-white rounded-lg p-[0.25rem]">
         <div className="flex items-center gap-[0.5rem]">
           <div className="size-[0.5rem] bg-dark-green rounded-full animate-pulse"></div>
