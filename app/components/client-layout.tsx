@@ -31,13 +31,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
     <div
       className={
-        shouldShowNavbar ? "flex gap-[0.5rem] p-[0.5rem]" : "bg-gray-50"
+        shouldShowNavbar
+          ? "flex gap-[0.5rem] p-[0.5rem] justify-center"
+          : "bg-gray-50"
       }
     >
       {shouldShowNavbar && <Navbar />}
-      <div className={shouldShowNavbar ? "w-full rounded-lg" : "w-full"}>
-        {children}
-      </div>
+      <div className={shouldShowNavbar ? "w-full" : "w-full"}>{children}</div>
     </div>
   );
 }

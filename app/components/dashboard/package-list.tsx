@@ -31,7 +31,7 @@ export default function PackageList({ packages }: PackageListProps) {
   return (
     <div className="flex flex-col flex-auto gap-[1rem] overflow-y-auto w-fit min-w-fit">
       <div className="overflow-y-auto rounded-lg">
-        <div className="flex flex-col gap-[0.5rem]">
+        <div className="flex flex-col gap-[0.5rem] max-h-[calc(100svh-28px-24px)]">
           {packages.map((pkg) => (
             <div
               key={pkg.package_id}

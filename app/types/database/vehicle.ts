@@ -7,8 +7,10 @@ export const VehicleSchema = z.object({
   max_load: z.number(),
   led_status: z.string(),
   needs_confirmation: z.boolean(),
-  coord_x: z.number(),
-  coord_y: z.number(),
+  coord_x: z.number().nullable(), // 기존: z.number()
+  coord_y: z.number().nullable(), // 기존: z.number()
+  AI_coord_x: z.number().nullable(), // 추가
+  AI_coord_y: z.number().nullable(), // 추가
 });
 
 export type Vehicle = z.infer<typeof VehicleSchema>;

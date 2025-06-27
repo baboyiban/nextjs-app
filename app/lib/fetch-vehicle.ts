@@ -9,8 +9,10 @@ function transformRawVehicle(raw: any): Vehicle {
     max_load: raw.max_load,
     led_status: raw.led_status === "" ? undefined : raw.led_status,
     needs_confirmation: raw.needs_confirmation,
-    coord_x: raw.coord_x,
-    coord_y: raw.coord_y,
+    coord_x: raw.coord_x ?? null,
+    coord_y: raw.coord_y ?? null,
+    AI_coord_x: raw.AI_coord_x ?? null, // 추가
+    AI_coord_y: raw.AI_coord_y ?? null, // 추가
   };
 }
 

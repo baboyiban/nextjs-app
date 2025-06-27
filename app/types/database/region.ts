@@ -8,7 +8,7 @@ export const RegionSchema = z.object({
   max_capacity: z.number(),
   current_capacity: z.number(),
   is_full: z.boolean(),
-  saturated_at: z.string().nullable(),
+  saturated_at: z.string().nullable().optional(),
 });
 
 export type Region = z.infer<typeof RegionSchema>;

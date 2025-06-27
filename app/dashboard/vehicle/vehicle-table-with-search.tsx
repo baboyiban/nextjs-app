@@ -46,6 +46,8 @@ const vehicleColumnDefs: Column<Vehicle>[] = [
   },
   { header: "좌표 X", accessor: "coord_x" },
   { header: "좌표 Y", accessor: "coord_y" },
+  { header: "AI 좌표 X", accessor: "AI_coord_x" }, // 추가
+  { header: "AI 좌표 Y", accessor: "AI_coord_y" }, // 추가
 ];
 
 export default function VehicleTableWithSearch({ initialData }: Props) {

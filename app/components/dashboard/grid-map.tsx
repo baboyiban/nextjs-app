@@ -191,8 +191,8 @@ export default function GridMap({ vehicles, packages }: GridMapProps) {
   const vehicleIds = Object.keys(VEHICLE_MAP_CONFIG);
 
   return (
-    <div className="flex flex-col rounded-lg w-fit overflow-y-auto">
-      <div className="flex gap-[0.5rem] justify-center flex-wrap *:bg-white *:p-[1rem] *:rounded-lg *:w-full *:overflow-x-auto">
+    <div className="max-w-[calc(100svw-240px-32px-165px)] flex flex-col rounded-lg overflow-y-auto">
+      <div className="max-h-[calc(100svh-112px-28px-32px)] flex gap-[0.5rem] justify-center flex-wrap *:bg-white *:p-[1rem] *:rounded-lg *:w-full *:overflow-x-auto">
         {vehicleIds.map((vehicleId) => (
           <SingleMap
             key={vehicleId}
