@@ -4,7 +4,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { VehicleSchema, Vehicle } from "@/app/types/database/vehicle";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import SearchTableSection from "@/app/components/data/search-table-section";
+import SearchTableSection from "@/app/components/search/search-table-section";
 import { Column } from "@/app/components/data/data-table";
 
 type Props = {

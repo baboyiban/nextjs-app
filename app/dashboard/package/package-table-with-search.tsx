@@ -5,7 +5,7 @@ import { z } from "zod";
 import { PackageSchema, Package } from "@/app/types/database/package";
 import { StatusBadge } from "@/app/components/ui/status-badge";
 import { formatDateTimeISO } from "@/app/utils/format";
-import SearchTableSection from "@/app/components/data/search-table-section";
+import SearchTableSection from "@/app/components/search/search-table-section";
 import { Column } from "@/app/components/data/data-table";
 
 type Props = {

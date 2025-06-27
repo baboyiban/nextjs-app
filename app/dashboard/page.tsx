@@ -8,8 +8,7 @@ import { Loading } from "../components/ui/loading";
 import VehicleSummary from "../components/dashboard/vehicle-summary";
 
 export default function DashboardPage() {
-  const { regions, vehicles, packages, loading, lastUpdated } =
-    useDashboardData();
+  const { vehicles, packages, loading, lastUpdated } = useDashboardData();
 
   if (loading) {
     return <Loading text="데이터를 불러오는 중..." />;
@@ -29,7 +28,7 @@ export default function DashboardPage() {
 
       <div className="flex gap-[0.5rem] max-h-[calc(100dvh-16px-28px-8px)]">
         <VehicleSummary vehicles={vehicles} />
-        <GridMap regions={regions} vehicles={vehicles} packages={packages} />
+        <GridMap vehicles={vehicles} packages={packages} />
         <PackageList packages={packages} />
       </div>
     </div>

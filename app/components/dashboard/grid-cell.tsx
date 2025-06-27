@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { getVehicleLedStyle } from "../../utils/dashboard";
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Package } from "@/app/types/database/package";
 import { Region } from "@/app/types/database/region";
@@ -12,7 +11,7 @@ interface GridCellProps {
   region?: Region;
   vehicles: Vehicle[];
   packages: Package[];
-  emptySpaces: Set<string>; // 빈 공간 정보를 props로 받음
+  isSpace: boolean;
 }
 
 export default function GridCell({
@@ -21,21 +20,11 @@ export default function GridCell({
   region,
   vehicles,
   packages,
-  emptySpaces,
+  isSpace,
 }: GridCellProps) {
-  const isEmpty = emptySpaces.has(`${col},${row}`);
-  const vehiclesAtPosition = isEmpty ? [] : vehicles;
-  const packagesInRegion = region ? packages : [];
-
-  if (isEmpty) {
-    return (
-      <div className="relative flex flex-col items-center justify-center size-[4rem]">
-        <div className="flex items-center justify-center w-full h-full"></div>
-        <div className="absolute bottom-[0.1rem] right-[0.1rem] text-[0.5rem] text-transparent">
-          {col},{row}
-        </div>
-      </div>
-    );
+  if (!isSpace) {
+    // 진짜 빈 공간
+    return <div className="size-[4rem] bg-transparent"></div>;
   }
 
   return (
@@ -57,21 +46,29 @@ export default function GridCell({
       )}
 
       {/* 패키지 수 표시 */}
-      {packagesInRegion.length > 0 && (
+      {packages.length > 0 && (
         <div className="absolute top-0.5 right-0.5 text-[8px] bg-red-500 text-white rounded-full px-1 min-w-4 text-center">
-          {packagesInRegion.length}
+          {packages.length}
         </div>
       )}
 
       {/* 차량 정보 */}
-      {vehiclesAtPosition.length > 0 && (
+      {vehicles.length > 0 && (
         <div className="flex flex-col items-center justify-center gap-0.5">
-          {vehiclesAtPosition.map((vehicle) => (
+          {vehicles.map((vehicle) => (
             <div
               key={vehicle.internal_id}
               className={`
                 text-[0.5rem] rounded-lg p-[0.25rem]
-                ${getVehicleLedStyle(vehicle.led_status)}
+                ${
+                  vehicle.led_status === "빨강"
+                    ? "bg-red"
+                    : vehicle.led_status === "하양"
+                      ? "bg-gray"
+                      : vehicle.led_status === "초록"
+                        ? "bg-green"
+                        : "bg-gray"
+                }
               `}
               title={`${vehicle.vehicle_id} | 적재: ${vehicle.current_load}/${vehicle.max_load} | LED: ${vehicle.led_status || "없음"}`}
             >

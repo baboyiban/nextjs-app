@@ -6,7 +6,7 @@ import { Region } from "@/app/types/database/region";
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Package } from "@/app/types/database/package";
 
-const UPDATE_INTERVAL = 1000; // 1초
+const UPDATE_INTERVAL = 15000; // 15초
 
 function getToken() {
   if (typeof window !== "undefined") {

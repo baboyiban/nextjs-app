@@ -7,7 +7,7 @@ import {
   DeliveryLog,
 } from "@/app/types/database/delivery-log";
 import { StatusBadge } from "@/app/components/ui/status-badge";
-import SearchTableSection from "@/app/components/data/search-table-section";
+import SearchTableSection from "@/app/components/search/search-table-section";
 import { Column } from "@/app/components/data/data-table";
 import { formatDateTimeISO } from "@/app/utils/format";
 

@@ -2,32 +2,23 @@
 
 import React from "react";
 import { Vehicle } from "@/app/types/database/vehicle";
-import {
-  getMapSizeForVehicle,
-  VEHICLE_MAP_CONFIG,
-} from "@/app/utils/dashboard";
+
+const VEHICLE_IDS = ["A-1000", "B-1001"];
 
 interface VehicleSummaryProps {
   vehicles: Vehicle[];
 }
 
 export default function VehicleSummary({ vehicles }: VehicleSummaryProps) {
-  // 사용 가능한 차량 ID들 가져오기
-  const availableVehicleIds = Object.keys(VEHICLE_MAP_CONFIG);
-
   return (
     <div className="flex flex-col w-fit min-w-fit gap-[0.5rem]">
-      {availableVehicleIds.map((vehicleId) => {
+      {VEHICLE_IDS.map((vehicleId) => {
         const vehicleData = vehicles.find((v) => v.vehicle_id === vehicleId);
-        const mapSize = getMapSizeForVehicle(vehicleId);
 
         return (
           <div key={vehicleId} className="bg-white p-[0.5rem] rounded-lg">
             <div className="">{vehicleId}</div>
             <div className="">
-              <div>
-                🌏: {mapSize.width}×{mapSize.height}
-              </div>
               {vehicleData ? (
                 <>
                   <div>

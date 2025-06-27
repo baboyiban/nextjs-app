@@ -1,12 +1,30 @@
 "use client";
 
 import React from "react";
-import { getPackageStatus } from "../../utils/dashboard";
 import { Package } from "@/app/types/database/package";
 import { StatusBadge } from "../ui/status-badge";
 
 interface PackageListProps {
   packages: Package[];
+}
+
+function getPackageStatus(
+  status: string,
+): "success" | "warning" | "danger" | "neutral" | "process" {
+  switch (status) {
+    case "등록됨":
+      return "neutral";
+    case "투입됨":
+      return "process";
+    case "A차운송중":
+      return "warning";
+    case "B차운송중":
+      return "warning";
+    case "완료됨":
+      return "success";
+    default:
+      return "neutral";
+  }
 }
 
 export default function PackageList({ packages }: PackageListProps) {

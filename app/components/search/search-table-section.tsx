@@ -1,7 +1,7 @@
 "use client";
 
 import SearchBar, { Field } from "./search-bar";
-import { Column, DataTable } from "./data-table";
+import { Column, DataTable } from "../data/data-table";
 
 type SearchTableSectionProps<T> = {
   fields: Field[];
