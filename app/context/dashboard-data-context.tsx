@@ -1,4 +1,3 @@
-// frontend/app/context/dashboard-data-context.tsx
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
@@ -40,8 +39,9 @@ export function DashboardDataProvider({
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchAll = async () => {
-    setLoading(true);
+  // 최초 로딩에만 loading 표시, 이후에는 loading을 false로 유지
+  const fetchAll = async (isInitial = false) => {
+    if (isInitial) setLoading(true);
     try {
       const [emergencyData, regionData, vehicleData, packageData] =
         await Promise.all([
@@ -66,13 +66,13 @@ export function DashboardDataProvider({
       setVehicles([]);
       setPackages([]);
     } finally {
-      setLoading(false);
+      if (isInitial) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAll();
-    const timer = setInterval(fetchAll, 10000);
+    fetchAll(true); // 최초 로딩만 loading
+    const timer = setInterval(() => fetchAll(false), 10000); // 10초
     return () => clearInterval(timer);
   }, []);
 
@@ -86,7 +86,7 @@ export function DashboardDataProvider({
         regions,
         loading,
         lastUpdated,
-        refetch: fetchAll,
+        refetch: () => fetchAll(false),
       }}
     >
       {children}
