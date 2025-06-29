@@ -15,7 +15,7 @@ export const deliveryLogColumnDefs: Column<DeliveryLog>[] = [
       item.registered_at ? (
         formatDateTimeISO(item.registered_at as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
   {
@@ -25,7 +25,7 @@ export const deliveryLogColumnDefs: Column<DeliveryLog>[] = [
       item.first_transport_time ? (
         formatDateTimeISO(item.first_transport_time as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
   {
@@ -35,7 +35,7 @@ export const deliveryLogColumnDefs: Column<DeliveryLog>[] = [
       item.input_time ? (
         formatDateTimeISO(item.input_time as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
   {
@@ -45,7 +45,7 @@ export const deliveryLogColumnDefs: Column<DeliveryLog>[] = [
       item.second_transport_time ? (
         formatDateTimeISO(item.second_transport_time as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
   {
@@ -55,7 +55,7 @@ export const deliveryLogColumnDefs: Column<DeliveryLog>[] = [
       item.completed_at ? (
         formatDateTimeISO(item.completed_at as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
 ];

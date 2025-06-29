@@ -1,15 +1,16 @@
 type StatusBadgeProps = {
   status: string;
-  variant: "success" | "warning" | "danger" | "neutral" | "process";
+  variant: "green" | "yellow" | "red" | "gray" | "blue" | "deepGray";
 };
 
 export function StatusBadge({ status, variant }: StatusBadgeProps) {
   const variantClasses = {
-    success: "bg-green",
-    warning: "bg-yellow",
-    danger: "bg-red",
-    neutral: "bg-gray",
-    process: "bg-blue",
+    green: "bg-green",
+    yellow: "bg-yellow",
+    red: "bg-red",
+    gray: "bg-gray",
+    blue: "bg-blue",
+    deepGray: "bg-deep-gray",
   };
 
   return (

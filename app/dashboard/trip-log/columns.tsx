@@ -13,7 +13,7 @@ export const tripLogColumnDefs: Column<TripLog>[] = [
       item.start_time ? (
         formatDateTimeISO(item.start_time as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
   {
@@ -23,7 +23,7 @@ export const tripLogColumnDefs: Column<TripLog>[] = [
       item.end_time ? (
         formatDateTimeISO(item.end_time as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
   {
@@ -32,7 +32,7 @@ export const tripLogColumnDefs: Column<TripLog>[] = [
     cell: (item) => (
       <StatusBadge
         status={item.status}
-        variant={item.status === "운행중" ? "process" : "neutral"}
+        variant={item.status === "운행중" ? "blue" : "gray"}
       />
     ),
   },
@@ -43,7 +43,7 @@ export const tripLogColumnDefs: Column<TripLog>[] = [
       item.destination ? (
         item.destination
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
 ];

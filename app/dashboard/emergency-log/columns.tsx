@@ -13,7 +13,7 @@ export const emergencyLogColumnDefs: Column<EmergencyLog>[] = [
       item.call_time ? (
         formatDateTimeISO(item.call_time)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
   { header: "호출 사유", accessor: "reason" },
@@ -24,7 +24,7 @@ export const emergencyLogColumnDefs: Column<EmergencyLog>[] = [
     cell: (item) => (
       <StatusBadge
         status={item.needs_confirmation ? "필요" : "불필요"}
-        variant={item.needs_confirmation ? "danger" : "success"}
+        variant={item.needs_confirmation ? "red" : "green"}
       />
     ),
   },

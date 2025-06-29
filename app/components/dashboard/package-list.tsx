@@ -10,20 +10,20 @@ interface PackageListProps {
 
 function getPackageStatus(
   status: string,
-): "success" | "warning" | "danger" | "neutral" | "process" {
+): "green" | "yellow" | "red" | "gray" | "blue" | "deepGray" {
   switch (status) {
     case "등록됨":
-      return "neutral";
+      return "gray";
     case "투입됨":
-      return "process";
+      return "blue";
     case "A차운송중":
-      return "warning";
+      return "yellow";
     case "B차운송중":
-      return "warning";
+      return "yellow";
     case "완료됨":
-      return "success";
+      return "green";
     default:
-      return "neutral";
+      return "deepGray";
   }
 }
 

@@ -15,14 +15,14 @@ export const packageColumnDefs: Column<Package>[] = [
         status={item.package_status}
         variant={
           item.package_status === "완료됨"
-            ? "success"
+            ? "green"
             : item.package_status === "B차운송중"
-              ? "warning"
+              ? "yellow"
               : item.package_status === "A차운송중"
-                ? "warning"
+                ? "yellow"
                 : item.package_status === "투입됨"
-                  ? "process"
-                  : "neutral"
+                  ? "blue"
+                  : "gray"
         }
       />
     ),
@@ -34,7 +34,7 @@ export const packageColumnDefs: Column<Package>[] = [
       item.registered_at ? (
         formatDateTimeISO(item.registered_at)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
 ];

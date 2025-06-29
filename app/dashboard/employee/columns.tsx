@@ -10,9 +10,9 @@ export const employeeColumnDefs: Column<Employee>[] = [
     accessor: "is_active",
     cell: (item) =>
       item.is_active ? (
-        <StatusBadge status="재직" variant="success" />
+        <StatusBadge status="재직" variant="green" />
       ) : (
-        <StatusBadge status="퇴사" variant="neutral" />
+        <StatusBadge status="퇴사" variant="gray" />
       ),
   },
 ];

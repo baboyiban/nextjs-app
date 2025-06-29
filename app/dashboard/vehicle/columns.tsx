@@ -15,12 +15,12 @@ export const vehicleColumnDefs: Column<Vehicle>[] = [
         status={item.led_status || "N/A"}
         variant={
           item.led_status === "빨강"
-            ? "danger"
+            ? "red"
             : item.led_status === "하양"
-              ? "warning"
+              ? "gray"
               : item.led_status === "초록"
-                ? "success"
-                : "neutral"
+                ? "green"
+                : "deepGray"
         }
       />
     ),
@@ -31,7 +31,7 @@ export const vehicleColumnDefs: Column<Vehicle>[] = [
     cell: (item) => (
       <StatusBadge
         status={item.needs_confirmation ? "필요" : "불필요"}
-        variant={item.needs_confirmation ? "danger" : "success"}
+        variant={item.needs_confirmation ? "red" : "green"}
       />
     ),
   },

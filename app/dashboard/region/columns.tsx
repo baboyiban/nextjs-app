@@ -15,9 +15,9 @@ export const regionColumnDefs: Column<Region>[] = [
     accessor: "is_full",
     cell: (item) =>
       item.is_full ? (
-        <StatusBadge status="포화" variant="danger" />
+        <StatusBadge status="포화" variant="red" />
       ) : (
-        <StatusBadge status="여유" variant="success" />
+        <StatusBadge status="여유" variant="green" />
       ),
   },
   {
@@ -27,7 +27,7 @@ export const regionColumnDefs: Column<Region>[] = [
       item.saturated_at ? (
         formatDateTimeISO(item.saturated_at as any)
       ) : (
-        <StatusBadge status="N/A" variant="neutral" />
+        <StatusBadge status="N/A" variant="gray" />
       ),
   },
 ];
