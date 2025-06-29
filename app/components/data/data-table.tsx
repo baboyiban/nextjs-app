@@ -17,13 +17,16 @@ export function DataTable<T>({
   columns,
   cellContext,
 }: DataTableProps<T>) {
-  // 조건문 제거
-
   return (
-    <div className="bg-white p-[1rem] rounded-lg max-w-[calc(100dvw-15rem-1rem-0.5rem)]">
-      <div className="overflow-x-auto rounded-lg border border-gray w-full">
+    <div className="bg-white p-[1rem] rounded-lg ">
+      <div
+        className="max-w-[calc(100dvw-240px-24px-32px)] overflow-auto rounded-lg border border-gray w-full"
+        style={{
+          maxHeight: "calc(100dvh - 24px - var(--search-bar-height) - 32px)",
+        }}
+      >
         <table className="min-w-full bg-white border-collapse">
-          <thead className="bg-gray">
+          <thead className="sticky top-0 bg-gray">
             <tr className="*:p-[0.5rem] *:whitespace-nowrap *:font-normal text-left">
               {columns.map((col, idx) => (
                 <th key={idx}>{col.header}</th>
@@ -60,10 +63,6 @@ export function DataTable<T>({
               : null}
           </tbody>
         </table>
-        {/* 데이터가 없을 때 메시지를 테이블 아래에 표시하고 싶으면 아래 주석 해제 */}
-        {/* {(!Array.isArray(data) || data.length === 0) && (
-          <div className="p-[1rem]">{emptyMessage}</div>
-        )} */}
       </div>
     </div>
   );
