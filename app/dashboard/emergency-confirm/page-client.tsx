@@ -4,20 +4,21 @@
 import { useState } from "react";
 import { DataTable } from "@/app/components/data/data-table";
 import { emergencyRealtimeColumns } from "./columns";
-import Modal from "@/app/components/common/modal";
 import { useAuth } from "@/app/context/auth-context";
 import { useDashboardData } from "@/app/context/dashboard-data-context";
+import ConfirmWithSuccessModal from "@/app/components/common/confirm-with-success-modal";
 
 export default function EmergencyConfirmPage() {
   const { emergencies, refetch } = useDashboardData();
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [modalTripId, setModalTripId] = useState<number | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const { user } = useAuth();
 
   const handleOpenModal = (trip_id: number | null) => {
     setModalTripId(trip_id);
+    setShowSuccess(false);
   };
 
   const handleModalConfirm = async () => {
@@ -36,12 +37,16 @@ export default function EmergencyConfirmPage() {
         body: JSON.stringify({ needs_confirmation: false }),
       });
       if (res.ok) {
-        setSuccessMsg("확인되었습니다!");
         refetch();
-        setTimeout(() => setSuccessMsg(null), 2000);
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          setModalTripId(null);
+        }, 2000);
+      } else {
+        setModalTripId(null);
       }
       setLoading(false);
-      setModalTripId(null);
     }
   };
 
@@ -55,36 +60,18 @@ export default function EmergencyConfirmPage() {
           loading,
         }}
       />
-      <Modal
-        className="flex flex-col gap-[0.5rem] bg-white"
+      <ConfirmWithSuccessModal
         open={modalTripId !== null}
-        onClose={() => setModalTripId(null)}
-      >
-        <p>정말로 확인 처리하시겠습니까?</p>
-        <div className="flex gap-[0.5rem] justify-center">
-          <button
-            onClick={handleModalConfirm}
-            disabled={loading}
-            className="p-[0.5rem] bg-red rounded-lg"
-          >
-            확인
-          </button>
-          <button
-            onClick={() => setModalTripId(null)}
-            disabled={loading}
-            className="p-[0.5rem] bg-deep-gray text-gray-700 rounded-lg"
-          >
-            취소
-          </button>
-        </div>
-      </Modal>
-      <Modal
-        open={!!successMsg}
-        onClose={() => setSuccessMsg(null)}
-        className="bg-green"
-      >
-        {successMsg}
-      </Modal>
+        onClose={() => {
+          setModalTripId(null);
+          setShowSuccess(false);
+        }}
+        onConfirm={handleModalConfirm}
+        loading={loading}
+        confirmMessage="정말로 확인 처리하시겠습니까?"
+        successMessage="확인되었습니다!"
+        showSuccess={showSuccess}
+      />
     </>
   );
 }
