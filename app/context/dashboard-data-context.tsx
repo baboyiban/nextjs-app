@@ -1,15 +1,21 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from "react";
 import {
   fetchEmergencyLogClient,
   fetchRegionClient,
 } from "@/app/lib/client-fetch";
 
-// 타입 정의 (실제 타입 import로 대체하세요)
 import { Vehicle } from "@/app/types/database/vehicle";
 import { Package } from "@/app/types/database/package";
 import { Region } from "@/app/types/database/region";
 import { EmergencyLog } from "@/app/types/database/emergency-log";
+import { ChangeNotify } from "@/app/types/database/change-notify";
 
 type DashboardDataContextType = {
   hasEmergency: boolean;
@@ -19,6 +25,7 @@ type DashboardDataContextType = {
   regions: Region[];
   loading: boolean;
   lastUpdated: Date | null;
+  now: Date; // 현재 시간
   refetch: () => void;
 };
 
@@ -38,42 +45,86 @@ export function DashboardDataProvider({
   const [regions, setRegions] = useState<Region[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [now, setNow] = useState<Date>(new Date());
 
-  // 최초 로딩에만 loading 표시, 이후에는 loading을 false로 유지
-  const fetchAll = async (isInitial = false) => {
-    if (isInitial) setLoading(true);
-    try {
-      const [emergencyData, regionData, vehicleData, packageData] =
-        await Promise.all([
-          fetchEmergencyLogClient(),
-          fetchRegionClient(),
-          fetch("/api/vehicle").then((res) => (res.ok ? res.json() : [])),
-          fetch("/api/package").then((res) => (res.ok ? res.json() : [])),
-        ]);
-      const filteredEmergencies = emergencyData.filter(
-        (e: EmergencyLog) => !!e.needs_confirmation,
-      );
-      setEmergencies(filteredEmergencies);
-      setHasEmergency(filteredEmergencies.length > 0);
-      setRegions(regionData);
-      setVehicles(vehicleData);
-      setPackages(packageData);
-      setLastUpdated(new Date());
-    } catch {
-      setEmergencies([]);
-      setHasEmergency(false);
-      setRegions([]);
-      setVehicles([]);
-      setPackages([]);
-    } finally {
-      if (isInitial) setLoading(false);
-    }
+  // change-notify 최신 id 기억
+  const lastChangeIdRef = useRef<number | null>(null);
+
+  // 1초마다 현재 시간 갱신
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // 테이블별 fetch 함수
+  const fetchVehicles = async () => {
+    const res = await fetch("/api/vehicle");
+    setLastUpdated(new Date());
+    setVehicles(res.ok ? await res.json() : []);
+  };
+  const fetchPackages = async () => {
+    const res = await fetch("/api/package");
+    setLastUpdated(new Date());
+    setPackages(res.ok ? await res.json() : []);
+  };
+  const fetchEmergencies = async () => {
+    const data = await fetchEmergencyLogClient();
+    const filtered = data.filter((e: EmergencyLog) => !!e.needs_confirmation);
+    setLastUpdated(new Date());
+    setEmergencies(filtered);
+    setHasEmergency(filtered.length > 0);
+  };
+  const fetchRegions = async () => {
+    const data = await fetchRegionClient();
+    setRegions(data);
   };
 
+  // 최초 전체 fetch
+  const fetchAll = async () => {
+    setLoading(true);
+    await Promise.all([
+      fetchEmergencies(),
+      fetchRegions(),
+      fetchVehicles(),
+      fetchPackages(),
+    ]);
+    setLastUpdated(new Date());
+    setLoading(false);
+  };
+
+  // change-notify 폴링 (1초)
   useEffect(() => {
-    fetchAll(true); // 최초 로딩만 loading
-    const timer = setInterval(() => fetchAll(false), 10000); // 10초
-    return () => clearInterval(timer);
+    let isMounted = true;
+    const poll = async () => {
+      try {
+        const res = await fetch("/api/change-notify");
+        const data: ChangeNotify[] = await res.json();
+        if (!isMounted || !data.length) return;
+        const latest = data[0];
+        if (lastChangeIdRef.current !== latest.id) {
+          lastChangeIdRef.current = latest.id;
+          // 변경된 테이블만 fetch
+          if (latest.table_name === "vehicle") await fetchVehicles();
+          else if (latest.table_name === "package") await fetchPackages();
+          else if (latest.table_name === "emergency_log")
+            await fetchEmergencies();
+          else if (latest.table_name === "region") await fetchRegions();
+          setLastUpdated(new Date());
+        }
+      } catch (e) {
+        console.error("change-notify polling error:", e);
+      }
+    };
+    const timer = setInterval(poll, 1000);
+    return () => {
+      isMounted = false;
+      clearInterval(timer);
+    };
+  }, []);
+
+  // 최초 전체 fetch (mount 시 1회)
+  useEffect(() => {
+    fetchAll();
   }, []);
 
   return (
@@ -86,7 +137,8 @@ export function DashboardDataProvider({
         regions,
         loading,
         lastUpdated,
-        refetch: () => fetchAll(false),
+        now,
+        refetch: fetchAll,
       }}
     >
       {children}

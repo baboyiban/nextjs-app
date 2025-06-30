@@ -47,12 +47,9 @@ export default function PackageList({ packages }: PackageListProps) {
               <div className="text-[0.875rem]">
                 <div>종류: {pkg.package_type}</div>
                 <div>지역: {pkg.region_id}</div>
-                <div className="">
-                  등록:{" "}
-                  <div className="text-[0.75rem] whitespace-nowrap">
-                    {pkg.registered_at &&
-                      new Date(pkg.registered_at).toLocaleString()}
-                  </div>
+                <div className="text-[0.75rem] whitespace-nowrap text-dark-gray">
+                  {pkg.registered_at &&
+                    new Date(pkg.registered_at).toLocaleString()}
                 </div>
               </div>
             </div>

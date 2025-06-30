@@ -9,7 +9,7 @@ import { Loading } from "../components/ui/loading";
 import VehicleSummary from "../components/dashboard/vehicle-summary";
 
 export default function DashboardPage() {
-  const { vehicles, packages, loading, lastUpdated } = useDashboardData();
+  const { vehicles, packages, loading, lastUpdated, now } = useDashboardData();
 
   if (loading) {
     return <Loading text="데이터를 불러오는 중..." />;
@@ -21,7 +21,9 @@ export default function DashboardPage() {
         <div className="flex items-center gap-[0.5rem]">
           <div className="size-[0.5rem] bg-dark-green rounded-full animate-pulse"></div>
           <span className="text-sm text-dark-gray">
-            {lastUpdated ? `${lastUpdated.toLocaleTimeString()}` : ""}
+            {now
+              ? `${now.toLocaleTimeString()} ${lastUpdated && `(최근 업데이트: ${lastUpdated.toLocaleTimeString()})`}`
+              : ""}
           </span>
         </div>
       </div>
