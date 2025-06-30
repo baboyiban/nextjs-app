@@ -32,7 +32,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     <div
       className={
         shouldShowNavbar
-          ? "flex gap-[0.5rem] p-[0.5rem] justify-center"
+          ? "flex flex-col sm:flex-row gap-[0.5rem] p-[0.5rem] justify-center"
           : "bg-gray-50"
       }
     >

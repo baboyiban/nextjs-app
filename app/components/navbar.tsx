@@ -46,7 +46,7 @@ export default function Navbar() {
   const subLinks = filteredLinks.filter((link) => link.type === "sub");
 
   return (
-    <nav className="min-w-[15rem] max-w-[15rem] flex flex-col gap-[0.5rem] min-h-[calc(100dvh-1rem)] max-h-[calc(100dvh-1rem)] overflow-x-hidden overflow-y-auto rounded-lg">
+    <nav className="min-w-[15rem] sm:max-w-[15rem] flex flex-col gap-[0.5rem] sm:min-h-[calc(100dvh-1rem)] max-h-[calc(100dvh-1rem)] overflow-x-hidden overflow-y-auto rounded-lg">
       <div className="*:py-[1rem] *:text-center *:rounded-lg shadow-[inset_0_0_1px_rgba(0,0,0,0.1)] bg-white rounded-lg flex *:flex-auto">
         <div>
           <div className="font-medium">
