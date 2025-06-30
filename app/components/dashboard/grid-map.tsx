@@ -200,7 +200,7 @@ export default function GridMap({ vehicles }: GridMapProps) {
 
   return (
     <div className="max-w-[calc(100svw-240px-32px-165px)] flex flex-col rounded-lg overflow-y-auto">
-      <div className="max-h-[calc(100svh-184px-28px-32px)] flex gap-[0.5rem] justify-center flex-wrap *:bg-white *:p-[1rem] *:rounded-lg *:w-full *:overflow-x-auto">
+      <div className="max-h-[calc(100svh-28px-178px-32px)] flex gap-[0.5rem] justify-center flex-wrap *:bg-white *:p-[1rem] *:rounded-lg *:w-full *:overflow-x-auto">
         {mapTypes.map((mapType) => (
           <SingleMap key={mapType} mapType={mapType} vehicles={vehicles} />
         ))}
