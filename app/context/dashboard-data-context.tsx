@@ -44,7 +44,7 @@ export function DashboardDataProvider({
   const [packages, setPackages] = useState<Package[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [now, setNow] = useState<Date>(new Date());
 
   // change-notify 최신 id 기억
@@ -56,21 +56,17 @@ export function DashboardDataProvider({
     return () => clearInterval(timer);
   }, []);
 
-  // 테이블별 fetch 함수
   const fetchVehicles = async () => {
     const res = await fetch("/api/vehicle");
-    setLastUpdated(new Date());
     setVehicles(res.ok ? await res.json() : []);
   };
   const fetchPackages = async () => {
     const res = await fetch("/api/package");
-    setLastUpdated(new Date());
     setPackages(res.ok ? await res.json() : []);
   };
   const fetchEmergencies = async () => {
     const data = await fetchEmergencyLogClient();
     const filtered = data.filter((e: EmergencyLog) => !!e.needs_confirmation);
-    setLastUpdated(new Date());
     setEmergencies(filtered);
     setHasEmergency(filtered.length > 0);
   };
@@ -79,7 +75,6 @@ export function DashboardDataProvider({
     setRegions(data);
   };
 
-  // 최초 전체 fetch
   const fetchAll = async () => {
     setLoading(true);
     await Promise.all([
@@ -88,7 +83,6 @@ export function DashboardDataProvider({
       fetchVehicles(),
       fetchPackages(),
     ]);
-    setLastUpdated(new Date());
     setLoading(false);
   };
 
@@ -109,7 +103,7 @@ export function DashboardDataProvider({
           else if (latest.table_name === "emergency_log")
             await fetchEmergencies();
           else if (latest.table_name === "region") await fetchRegions();
-          setLastUpdated(new Date());
+          setLastUpdated(new Date()); // 변경 감지 시마다 갱신
         }
       } catch (e) {
         console.error("change-notify polling error:", e);
